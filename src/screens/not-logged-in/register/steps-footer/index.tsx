@@ -11,13 +11,11 @@ interface IStepsFooterProps {
   activeStep: string;
   setActiveStep: any;
   handleStepOneNext: any;
-  handleStepTwoNext: any;
   handleSubmit: any;
 }
 const StepsFooter = ({
   activeStep,
   handleStepOneNext,
-  handleStepTwoNext,
   setActiveStep,
   handleSubmit,
 }: IStepsFooterProps) => {
@@ -34,39 +32,11 @@ const StepsFooter = ({
           }
         />
       )}
-      {activeStep === REGISTER_STEPS_ENUM.SHOP_INFO && (
-        <View style={[viewFlexSpace]}>
-          <SubmitButton
-            buttonProps={{
-              onPress: () => setActiveStep(REGISTER_STEPS_ENUM.PERSONAL_INFO),
-            }}
-            containerStyle={{backgroundColor: APP_COLORS.GRAY}}
-            titleComponent={
-              <View style={[viewFlexCenter, {flexDirection: 'row'}]}>
-                <Icon name="chevron-left" size={20} color={APP_COLORS.WHITE} />
-                <Text style={{color: APP_COLORS.WHITE}}>Back </Text>
-              </View>
-            }
-          />
-          <SubmitButton
-            buttonProps={{
-              onPress: () => handleStepTwoNext(),
-              style: {flex: 1, marginLeft: 10},
-            }}
-            titleComponent={
-              <View style={[viewFlexCenter, {flexDirection: 'row'}]}>
-                <Text style={{color: APP_COLORS.WHITE}}>Next </Text>
-                <Icon name="chevron-right" size={20} color={APP_COLORS.WHITE} />
-              </View>
-            }
-          />
-        </View>
-      )}
       {activeStep === REGISTER_STEPS_ENUM.CREDENTIALS_INFO && (
         <View style={[viewFlexSpace]}>
           <SubmitButton
             buttonProps={{
-              onPress: () => setActiveStep(REGISTER_STEPS_ENUM.SHOP_INFO),
+              onPress: () => setActiveStep(REGISTER_STEPS_ENUM.PERSONAL_INFO),
             }}
             containerStyle={{backgroundColor: APP_COLORS.GRAY}}
             titleComponent={

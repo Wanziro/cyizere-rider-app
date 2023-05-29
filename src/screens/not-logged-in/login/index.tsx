@@ -154,7 +154,7 @@ const Login = ({navigation}: INavigationProp) => {
               fontWeight: 'bold',
               color: APP_COLORS.ORANGE,
             }}>
-            Supplier App
+            Rider App
           </Text>
         </View>
         <View style={{width: '90%', marginTop: 40}}>

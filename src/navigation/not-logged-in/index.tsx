@@ -38,7 +38,7 @@ function NotLoggedIn() {
           name="Register"
           component={Register}
           options={({route, navigation}: INavigationProp) => ({
-            title: 'Cyizere supplier registration',
+            title: 'Cyizere rider registration',
             headerStyle: {
               backgroundColor: APP_COLORS.ORANGE,
             },

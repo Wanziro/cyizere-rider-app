@@ -1,14 +1,7 @@
 import {View, Dimensions, StatusBar} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {APP_COLORS} from '../../../constants/colors';
-import {
-  btnWithBgContainerStyles,
-  btnWithBgTextStyles,
-  btnWithoutBgContainerStyles,
-  btnWithoutBgTextStyles,
-  commonInput,
-  viewFlexSpace,
-} from '../../../constants/styles';
+import {viewFlexSpace} from '../../../constants/styles';
 
 import {INavigationProp, TOAST_MESSAGE_TYPES} from '../../../../interfaces';
 import {toastMessage} from '../../../helpers';
@@ -46,7 +39,6 @@ import {fetchShopCategories} from '../../../actions/shopCategories';
 
 export enum REGISTER_STEPS_ENUM {
   PERSONAL_INFO = 'PERSONAL_INFO',
-  SHOP_INFO = 'SHOP_INFO',
   CREDENTIALS_INFO = 'CREDENTIALS_INFO',
 }
 
@@ -255,28 +247,6 @@ const Register = ({navigation}: INavigationProp) => {
       );
       return;
     }
-    setActiveStep(REGISTER_STEPS_ENUM.SHOP_INFO);
-  };
-
-  const handleStepTwoNext = () => {
-    if (
-      state.shopName.trim() === '' ||
-      state.shopAddress.trim() === '' ||
-      state.shopCategoryId === ''
-    ) {
-      toastMessage(
-        TOAST_MESSAGE_TYPES.ERROR,
-        'All information on this step are required.',
-      );
-      return;
-    }
-    if (state.open == state.close) {
-      toastMessage(
-        TOAST_MESSAGE_TYPES.ERROR,
-        'Please provide correct opening and closing hours.',
-      );
-      return;
-    }
     setActiveStep(REGISTER_STEPS_ENUM.CREDENTIALS_INFO);
   };
 
@@ -303,7 +273,6 @@ const Register = ({navigation}: INavigationProp) => {
         />
       </View>
       <StepsFooter
-        handleStepTwoNext={handleStepTwoNext}
         handleStepOneNext={handleStepOneNext}
         setActiveStep={setActiveStep}
         activeStep={activeStep}

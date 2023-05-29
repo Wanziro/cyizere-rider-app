@@ -13,20 +13,14 @@ const StepsHeader = ({activeStep}: IStepsHeaderProps) => {
     <View style={{backgroundColor: APP_COLORS.ORANGE, padding: 10, width}}>
       {activeStep === REGISTER_STEPS_ENUM.PERSONAL_INFO && (
         <View style={[viewFlexSpace]}>
-          <Text style={{color: APP_COLORS.WHITE}}>Supplier Personal info</Text>
-          <Text style={{color: APP_COLORS.WHITE}}>Step 1/3</Text>
-        </View>
-      )}
-      {activeStep === REGISTER_STEPS_ENUM.SHOP_INFO && (
-        <View style={[viewFlexSpace]}>
-          <Text style={{color: APP_COLORS.WHITE}}>Shop Information</Text>
-          <Text style={{color: APP_COLORS.WHITE}}>Step 2/3</Text>
+          <Text style={{color: APP_COLORS.WHITE}}>Rider Personal info</Text>
+          <Text style={{color: APP_COLORS.WHITE}}>Step 1/2</Text>
         </View>
       )}
       {activeStep === REGISTER_STEPS_ENUM.CREDENTIALS_INFO && (
         <View style={[viewFlexSpace]}>
           <Text style={{color: APP_COLORS.WHITE}}>Login Credentials</Text>
-          <Text style={{color: APP_COLORS.WHITE}}>Step 3/3</Text>
+          <Text style={{color: APP_COLORS.WHITE}}>Step 2/2</Text>
         </View>
       )}
     </View>
