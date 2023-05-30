@@ -4,10 +4,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import Icon4 from 'react-native-vector-icons/Entypo';
 import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon5 from 'react-native-vector-icons/Ionicons';
 import {INavigationProp, IUser} from '../../../../interfaces';
 import {resetUser} from '../../../actions/user';
-import {RootState} from '../../../reducers';
 import {viewFlexSpace} from '../../../constants/styles';
 import {APP_COLORS} from '../../../constants/colors';
 import FullPageLoader from '../../../components/full-page-loader';
@@ -19,9 +17,6 @@ import {resetProductPrices} from '../../../actions/productPrices';
 const Profile = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const {names, email, phone, token} = useSelector(
-    (state: RootState) => state.user as IUser,
-  );
 
   const handleLogout = () => {
     dispatch(resetUser());

@@ -53,11 +53,12 @@ const HelpAndSupport = () => {
             ]}>
             <Icon name="phone" size={20} color={APP_COLORS.BLACK} />
             <Text style={{flex: 1, marginLeft: 10, color: APP_COLORS.BLACK}}>
-              0788712248
+              0791593322
             </Text>
           </View>
         </Pressable>
-        <Pressable onPress={() => openLink('https://ntuma.rw/contact-us.html')}>
+        <Pressable
+          onPress={() => openLink('https://cyizere.rw/contact-us.html')}>
           <View
             style={[
               viewFlexSpace,
@@ -74,7 +75,7 @@ const HelpAndSupport = () => {
             <Icon2 name="angle-right" size={20} color={APP_COLORS.BLACK} />
           </View>
         </Pressable>
-        <Pressable onPress={() => openLink('https://ntuma.rw/terms.html')}>
+        <Pressable onPress={() => openLink('https://cyizere.rw/terms.html')}>
           <View
             style={[
               viewFlexSpace,
@@ -96,7 +97,7 @@ const HelpAndSupport = () => {
           </View>
         </Pressable>
         <Pressable
-          onPress={() => openLink('https://ntuma.rw/privacy-policy.html')}>
+          onPress={() => openLink('https://cyizere.rw/privacy-policy.html')}>
           <View
             style={[
               viewFlexSpace,
@@ -117,7 +118,7 @@ const HelpAndSupport = () => {
             <Icon2 name="angle-right" size={20} color={APP_COLORS.BLACK} />
           </View>
         </Pressable>
-        <Pressable onPress={() => openLink('https://ntuma.rw/faq.html')}>
+        <Pressable onPress={() => openLink('https://cyizere.rw/faq.html')}>
           <View
             style={[
               viewFlexSpace,
