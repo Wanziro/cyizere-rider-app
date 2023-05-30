@@ -45,7 +45,7 @@ const ChangePassword = ({navigation}: INavigationProp) => {
     }
     setIsLoading(true);
     axios
-      .put(app.BACKEND_URL + '/users/pwd', state, setHeaders(token))
+      .put(app.BACKEND_URL + '/riders/pwd', state, setHeaders(token))
       .then(res => {
         setState(initialState);
         setIsLoading(false);
