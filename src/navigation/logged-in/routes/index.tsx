@@ -8,9 +8,8 @@ import {
 } from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {Pressable, View, StatusBar, Text, Easing, Platform} from 'react-native';
+import {Pressable, View, StatusBar, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import Icon3 from 'react-native-vector-icons/Octicons';
 import Icon4 from 'react-native-vector-icons/FontAwesome5';
 import Icon5 from 'react-native-vector-icons/AntDesign';
@@ -26,21 +25,12 @@ import Wallet from '../../../screens/logged-in/wallet';
 import {fetchWalletTransactions} from '../../../actions/walletTransactions';
 import VerificationDetails from '../../../screens/logged-in/verification-details';
 import DocumentPreview from '../../../screens/logged-in/document-preview';
-import MarketSubScriptions from '../../../screens/logged-in/market-subscriptions';
 import OrderDetails from '../../../screens/logged-in/order-details';
-import PaymentDetails from '../../../screens/logged-in/payment-details';
-import AddSupplier from '../../../screens/logged-in/add-supplier';
-import PaymentProof from '../../../screens/logged-in/payment-proof';
-import ChattRoom from '../../../screens/logged-in/chat-room';
-import ChattRoomHeader from '../../../screens/logged-in/chat-room/header';
-import ViewAndSendSelectedFile from '../../../screens/logged-in/chat-room/view-and-send-selected-file';
-import ImagePreview from '../../../screens/logged-in/chat-room/image-preview';
 import AccountSettings from '../../../screens/logged-in/account-settings';
 import UpdateUserInfo from '../../../screens/logged-in/update-user-info';
 import ChangePassword from '../../../screens/logged-in/change-password';
 import DeleteAccount from '../../../screens/logged-in/delete-account';
 import HelpAndSupport from '../../../screens/logged-in/help-and-support';
-import Home from '../../../screens/logged-in/home';
 import AddProduct from '../../../screens/logged-in/add-product';
 import EditProduct from '../../../screens/logged-in/edit-product';
 import ProductPrices from '../../../screens/logged-in/product-prices';
@@ -49,10 +39,6 @@ import HiddenProducts from '../../../screens/logged-in/products/hiddden-products
 import NotificationsHeader from '../../../screens/logged-in/notifications/header';
 import FailedOrders from '../../../screens/logged-in/orders/failed-orders';
 import OrderPreview from '../../../screens/logged-in/order-preview';
-import UpdateShopLocation from '../../../screens/logged-in/update-shop-location';
-import UpdateShopHours from '../../../screens/logged-in/update-shop-hours';
-import Gifts from '../../../screens/logged-in/gifts';
-import GiftsPackagingOptions from '../../../screens/logged-in/gifts-packaging-options';
 import AddPackaging from '../../../screens/logged-in/add-packaging';
 import EditPackagingOption from '../../../screens/logged-in/edit-packaging-option';
 import AddGift from '../../../screens/logged-in/add-gift';
@@ -137,38 +123,6 @@ function LoggedInRoutes() {
     );
   }
 
-  function GiftsTab() {
-    return (
-      <TopTab.Navigator
-        initialRouteName="GiftsList"
-        screenOptions={{
-          tabBarActiveTintColor: APP_COLORS.WHITE,
-          tabBarInactiveTintColor: APP_COLORS.WHITE,
-          tabBarIndicatorContainerStyle: {backgroundColor: APP_COLORS.ORANGE},
-          tabBarIndicatorStyle: {
-            backgroundColor: 'white',
-            height: 5,
-          },
-          tabBarLabelStyle: {textTransform: 'capitalize'},
-        }}>
-        <TopTab.Screen
-          options={{
-            tabBarLabel: 'Gifts List',
-          }}
-          name="GiftsList"
-          component={Gifts}
-        />
-        <TopTab.Screen
-          options={{
-            tabBarLabel: 'Packaging Options',
-          }}
-          name="GiftsPackagingOptions"
-          component={GiftsPackagingOptions}
-        />
-      </TopTab.Navigator>
-    );
-  }
-
   const HomeTabs = ({navigation}: INavigationProp) => {
     const [activeColor, setActiveColor] = useState(APP_COLORS.WHITE);
     const [inactiveColor, setInactiveColor] = useState('rgba(255,255,255,0.6)');
@@ -176,7 +130,6 @@ function LoggedInRoutes() {
       (state: RootState) => state.notifications,
     );
     const {orders} = useSelector((state: RootState) => state.orders);
-    const {shopName, hasGift} = useSelector((state: RootState) => state.user);
     const [notificationsCount, setNotificationsCount] = useState<number>(0);
     const [ordersCount, setOrdersCount] = useState<number>(0);
 
@@ -209,15 +162,13 @@ function LoggedInRoutes() {
         }}>
         <Tab.Screen
           name="Home"
-          component={Home}
+          component={OrdersTab}
           options={({route, navigation}) => ({
             headerShown: true,
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitle: shopName,
-            headerTitleAlign: 'center',
+            headerStyle: {backgroundColor: APP_COLORS.ORANGE},
             headerTintColor: APP_COLORS.WHITE,
+            headerTitleAlign: 'center',
+            title: 'Orders',
             tabBarIcon: ({focused, color, size}) => {
               return <Icon name="home" color={color} size={size} />;
             },
@@ -251,36 +202,6 @@ function LoggedInRoutes() {
                 }
           }
         />
-        <Tab.Screen
-          name="AddProduct"
-          component={AddProduct}
-          options={{
-            headerShown: true,
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-            headerStyle: {backgroundColor: APP_COLORS.ORANGE},
-            tabBarIcon: ({focused, color, size}) => {
-              return <Icon5 name="pluscircle" color={color} size={size} />;
-            },
-          }}
-        />
-
-        {hasGift && (
-          <Tab.Screen
-            name="Gifts"
-            component={GiftsTab}
-            options={{
-              headerShown: true,
-              headerTitleAlign: 'center',
-              title: 'Shop Gifts',
-              headerTintColor: APP_COLORS.WHITE,
-              headerStyle: {backgroundColor: APP_COLORS.ORANGE},
-              tabBarIcon: ({focused, color, size}) => {
-                return <Icon5 name="gift" color={color} size={size} />;
-              },
-            }}
-          />
-        )}
 
         <Tab.Screen
           name="Orders"
@@ -388,25 +309,7 @@ function LoggedInRoutes() {
             headerTintColor: APP_COLORS.WHITE,
           })}
         />
-        <Stack.Screen
-          name="MarketSubscriptions"
-          component={MarketSubScriptions}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Subscribe to markets',
-            headerRight: () => (
-              <Pressable onPress={() => navigation.replace('HomeTabs')}>
-                <View style={{paddingRight: 10}}>
-                  <Icon name="home" color={APP_COLORS.WHITE} size={25} />
-                </View>
-              </Pressable>
-            ),
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerShadowVisible: false,
-            headerTintColor: APP_COLORS.WHITE,
-          })}
-        />
+
         <Stack.Screen
           name="OrderDetails"
           component={OrderDetails}
@@ -419,83 +322,7 @@ function LoggedInRoutes() {
             headerTintColor: APP_COLORS.WHITE,
           })}
         />
-        <Stack.Screen
-          name="PaymentDetails"
-          component={PaymentDetails}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Payment Details for #' + route?.params?.order?.id,
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-          })}
-        />
-        <Stack.Screen
-          name="AddSupplier"
-          component={AddSupplier}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Add Supplier to #' + route?.params?.order?.id,
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-          })}
-        />
-        <Stack.Screen
-          name="PaymentProof"
-          component={PaymentProof}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Payment Proof for #' + route?.params?.order?.id,
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-          })}
-        />
 
-        <Stack.Screen
-          name="ChatRoom"
-          component={ChattRoom}
-          options={({route, navigation}: INavigationProp) => ({
-            title: '',
-            headerTitle: () => (
-              <ChattRoomHeader route={route as any} navigation={navigation} />
-            ),
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-          })}
-        />
-
-        <Stack.Screen
-          name="ImageBeforeSendPreview"
-          component={ViewAndSendSelectedFile}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Send File',
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-          })}
-        />
-        <Stack.Screen
-          name="ImagePreview"
-          component={ImagePreview}
-          options={({route, navigation}: INavigationProp) => ({
-            title: new Date(route?.params?.message?.createdAt).toUTCString(),
-            headerStyle: {
-              backgroundColor: APP_COLORS.BLACK,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-          })}
-        />
         <Stack.Screen
           name="AccountSettings"
           component={AccountSettings}
@@ -610,32 +437,6 @@ function LoggedInRoutes() {
           component={OrderPreview}
           options={({route, navigation}: INavigationProp) => ({
             title: 'Order Details',
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'left',
-            headerTintColor: APP_COLORS.WHITE,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          })}
-        />
-        <Stack.Screen
-          name="UpdateShopLocation"
-          component={UpdateShopLocation}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Update Shop Location',
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'left',
-            headerTintColor: APP_COLORS.WHITE,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          })}
-        />
-        <Stack.Screen
-          name="UpdateShopHours"
-          component={UpdateShopHours}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Update Shop Working Hours',
             headerStyle: {
               backgroundColor: APP_COLORS.ORANGE,
             },
