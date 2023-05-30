@@ -83,7 +83,7 @@ export const fetchUserStatusSilent =
   (): any => (dispatch: any, getState: any) => {
     const {user} = getState();
     axios
-      .get(app.BACKEND_URL + '/suppliers/verification', setHeaders(user.token))
+      .get(app.BACKEND_URL + '/riders/verification', setHeaders(user.token))
       .then(res => {
         dispatch(setIsLoadingUserVerificationStatus(false));
         const {
@@ -92,7 +92,6 @@ export const fetchUserStatusSilent =
           isActive,
           verificationStatus,
           verificationMessage,
-          hasGift,
         } = res.data.info;
         dispatch(
           setUser({

@@ -61,7 +61,7 @@ export const fetchNotifications = (): any => (dispatch: any, getState: any) => {
   dispatch(setLoadingNotificationsError(''));
   const {user} = getState();
   axios
-    .get(app.BACKEND_URL + '/notifications/suppliers/', setHeaders(user.token))
+    .get(app.BACKEND_URL + '/notifications/rider/', setHeaders(user.token))
     .then(res => {
       dispatch(setIsLoadingNotifications(false));
       dispatch(setIsHardReloadingNotifications(false));
@@ -85,7 +85,7 @@ export const fetchNotifications2 =
       .then(r => {
         axios
           .get(
-            app.BACKEND_URL + '/notifications/suppliers/',
+            app.BACKEND_URL + '/notifications/rider/',
             setHeaders(user.token),
           )
           .then(res => {

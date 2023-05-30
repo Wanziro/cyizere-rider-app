@@ -4,7 +4,6 @@ import {
   RESET_USER,
   SET_IS_LOADING_USER_VERIFICATION_STATUS,
   SET_IS_LOADING_USER_VERIFICATION_STATUS_ERROR,
-  setUser,
 } from '../actions/user';
 
 export interface IUserReducer extends IUser {
