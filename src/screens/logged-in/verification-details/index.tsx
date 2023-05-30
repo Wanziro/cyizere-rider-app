@@ -11,18 +11,16 @@ import {viewFlexCenter, viewFlexSpace} from '../../../constants/styles';
 import {INavigationProp, TOAST_MESSAGE_TYPES} from '../../../../interfaces';
 import FullPageLoader from '../../../components/full-page-loader';
 import DocumentPicker from 'react-native-document-picker';
-import {
-  fetchUserStatusSilent,
-  setUserIdNumberDocument,
-} from '../../../actions/user';
+import {fetchUserStatusSilent, setUser} from '../../../actions/user';
 import {toastMessage} from '../../../helpers';
 import {app} from '../../../constants/app';
 import UpdateIDNo from './update-id-no';
 
 const VerificationDetails = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
-  const {isVerified, verificationMessage, verificationStatus, token} =
-    useSelector((state: RootState) => state.user) as IUserReducer;
+  const userReducer = useSelector(
+    (state: RootState) => state.user,
+  ) as IUserReducer;
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -53,7 +51,7 @@ const VerificationDetails = ({navigation}: INavigationProp) => {
           const response = JSON.parse(xhr.response);
           if (xhr.status === 200) {
             const {idNumberDocument} = response;
-            dispatch(setUserIdNumberDocument(idNumberDocument));
+            dispatch(setUser({...userReducer, idNumberDocument}));
             toastMessage(TOAST_MESSAGE_TYPES.SUCCESS, response.msg);
           } else {
             toastMessage(TOAST_MESSAGE_TYPES.ERROR, response.msg);
@@ -62,7 +60,7 @@ const VerificationDetails = ({navigation}: INavigationProp) => {
           toastMessage(TOAST_MESSAGE_TYPES.ERROR, xhr.response);
         }
       };
-      xhr.setRequestHeader('token', token);
+      xhr.setRequestHeader('token', userReducer.token);
       xhr.send(formData);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -76,7 +74,7 @@ const VerificationDetails = ({navigation}: INavigationProp) => {
   return (
     <View style={{flex: 1, backgroundColor: APP_COLORS.WHITE}}>
       <View style={[viewFlexCenter, {padding: 15}]}>
-        {isVerified ? (
+        {userReducer.isVerified ? (
           <>
             <Icon name="verified" size={100} color={APP_COLORS.ORANGE} />
             <Text
@@ -107,7 +105,7 @@ const VerificationDetails = ({navigation}: INavigationProp) => {
           <Text style={{color: APP_COLORS.BLACK, fontWeight: 'bold'}}>
             Verification Status:
           </Text>
-          <Text>{verificationStatus}</Text>
+          <Text>{userReducer.verificationStatus}</Text>
         </View>
         <View
           style={{
@@ -119,9 +117,9 @@ const VerificationDetails = ({navigation}: INavigationProp) => {
             Verification Review Comment:
           </Text>
           <Text style={{color: APP_COLORS.TEXT_GRAY}}>
-            {verificationMessage?.trim() === ''
+            {userReducer.verificationMessage?.trim() === ''
               ? 'No comment added yet.'
-              : verificationMessage}
+              : userReducer.verificationMessage}
           </Text>
         </View>
         <Pressable onPress={() => navigation.navigate('DocumentPreview')}>
@@ -144,7 +142,7 @@ const VerificationDetails = ({navigation}: INavigationProp) => {
             />
           </View>
         </Pressable>
-        {!isVerified && (
+        {!userReducer.isVerified && (
           <>
             <Pressable onPress={() => handleDocumentSelect()}>
               <View

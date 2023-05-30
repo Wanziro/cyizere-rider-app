@@ -23,9 +23,9 @@ import DisabledInput from '../../../../components/disabled-input';
 import {errorHandler, setHeaders, toastMessage} from '../../../../helpers';
 import {app} from '../../../../constants/app';
 import {TOAST_MESSAGE_TYPES} from '../../../../../interfaces';
-import {setUserIdNumber} from '../../../../actions/user';
 import CustomModal from '../../../../components/custom-modal';
 import SubmitButton from '../../../../components/submit-button';
+import {setUser} from '../../../../actions/user';
 
 interface IDepositProps {
   showModal: boolean;
@@ -34,8 +34,8 @@ interface IDepositProps {
 const initialErrorState = {idNumber: ''};
 const UpdateIDNo = ({showModal, setShowModal}: IDepositProps) => {
   const dispatch = useDispatch();
-  const {token, idNumber} = useSelector((state: RootState) => state.user);
-  const initialState = {idNumber} as any;
+  const userReducer = useSelector((state: RootState) => state.user);
+  const initialState = {idNumber: userReducer.idNumber} as any;
   const [state, setState] = useState(initialState);
   const [errors, setErrors] = useState(initialErrorState);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -52,12 +52,16 @@ const UpdateIDNo = ({showModal, setShowModal}: IDepositProps) => {
     setIsSubmitting(true);
 
     axios
-      .put(app.BACKEND_URL + '/suppliers/idno/', state, setHeaders(token))
+      .put(
+        app.BACKEND_URL + '/riders/idno/',
+        state,
+        setHeaders(userReducer.token),
+      )
       .then(res => {
         setShowModal(false);
         setIsSubmitting(false);
         toastMessage(TOAST_MESSAGE_TYPES.SUCCESS, res.data.msg);
-        dispatch(setUserIdNumber(res.data.idNumber));
+        dispatch(setUser({...userReducer, idNumber: res.data.idNumber}));
       })
       .catch(error => {
         setIsSubmitting(false);
@@ -67,7 +71,7 @@ const UpdateIDNo = ({showModal, setShowModal}: IDepositProps) => {
 
   useEffect(() => {
     setErrors(initialErrorState);
-    setState({...state, idNumber: idNumber});
+    setState({...state, idNumber: userReducer.idNumber});
   }, [showModal]);
 
   return (

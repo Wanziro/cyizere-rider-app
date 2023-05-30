@@ -10,7 +10,6 @@ import {resetUser} from '../../../actions/user';
 import {RootState} from '../../../reducers';
 import {viewFlexSpace} from '../../../constants/styles';
 import {APP_COLORS} from '../../../constants/colors';
-import {resetSubscribedMarkets} from '../../../actions/markets';
 import FullPageLoader from '../../../components/full-page-loader';
 import {resetNotifications} from '../../../actions/notifications';
 import {resetOrders} from '../../../actions/orders';
@@ -109,60 +108,6 @@ const Profile = ({navigation}: INavigationProp) => {
                 marginHorizontal: 10,
               }}>
               Verification Details
-            </Text>
-            <Icon4
-              name="chevron-right"
-              size={25}
-              color={APP_COLORS.TEXT_GRAY}
-            />
-          </View>
-        </Pressable>
-        <Pressable onPress={() => navigation.navigate('UpdateShopLocation')}>
-          <View
-            style={[
-              viewFlexSpace,
-              {
-                paddingVertical: 10,
-                paddingHorizontal: 20,
-                borderBottomColor: APP_COLORS.BORDER_COLOR,
-                borderBottomWidth: 1,
-              },
-            ]}>
-            <Icon5 name="location-outline" size={25} color={APP_COLORS.BLACK} />
-            <Text
-              style={{
-                color: APP_COLORS.TEXT_GRAY,
-                flex: 1,
-                marginHorizontal: 10,
-              }}>
-              Update Shop Location
-            </Text>
-            <Icon4
-              name="chevron-right"
-              size={25}
-              color={APP_COLORS.TEXT_GRAY}
-            />
-          </View>
-        </Pressable>
-        <Pressable onPress={() => navigation.navigate('UpdateShopHours')}>
-          <View
-            style={[
-              viewFlexSpace,
-              {
-                paddingVertical: 10,
-                paddingHorizontal: 20,
-                borderBottomColor: APP_COLORS.BORDER_COLOR,
-                borderBottomWidth: 1,
-              },
-            ]}>
-            <Icon3 name="hours-24" size={25} color={APP_COLORS.BLACK} />
-            <Text
-              style={{
-                color: APP_COLORS.TEXT_GRAY,
-                flex: 1,
-                marginHorizontal: 10,
-              }}>
-              Update Shop Working Hours
             </Text>
             <Icon4
               name="chevron-right"
