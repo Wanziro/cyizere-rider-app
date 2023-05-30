@@ -9,13 +9,11 @@ import {app} from '../../../constants/app';
 import {errorHandler, setHeaders} from '../../../helpers';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../reducers';
-import {setIsUserActive} from '../../../actions/user';
+import {setUser} from '../../../actions/user';
 
 const AccountSettings = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
-  const {token, isActive} = useSelector(
-    (state: RootState) => state.user as IUser,
-  );
+  const userReducer = useSelector((state: RootState) => state.user as IUser);
   const [isEnabled, setIsEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,13 +21,13 @@ const AccountSettings = ({navigation}: INavigationProp) => {
     setIsLoading(true);
     axios
       .put(
-        app.BACKEND_URL + '/agents/status',
+        app.BACKEND_URL + '/riders/status',
         {status: !isEnabled ? true : false},
-        setHeaders(token),
+        setHeaders(userReducer.token),
       )
       .then(res => {
         setIsLoading(false);
-        dispatch(setIsUserActive(res.data.status));
+        dispatch(setUser({...userReducer, isActive: res.data.status}));
         setIsEnabled(previousState => !previousState);
       })
       .catch(error => {
@@ -39,7 +37,7 @@ const AccountSettings = ({navigation}: INavigationProp) => {
   };
 
   useEffect(() => {
-    setIsEnabled(isActive);
+    setIsEnabled(userReducer.isActive);
   }, []);
   return (
     <View style={{flex: 1, backgroundColor: APP_COLORS.BACKGROUND_COLOR}}>

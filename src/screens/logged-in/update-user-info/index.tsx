@@ -19,13 +19,8 @@ import FullPageLoader from '../../../components/full-page-loader';
 import {errorHandler, setHeaders, toastMessage} from '../../../helpers';
 import axios from 'axios';
 import {app} from '../../../constants/app';
-import {
-  setUserEmail,
-  setUserNames,
-  setUserPhone,
-  setUserToken,
-} from '../../../actions/user';
 import SubmitButton from '../../../components/submit-button';
+import {setUser} from '../../../actions/user';
 
 const initialState = {
   names: '',
@@ -36,12 +31,14 @@ const UpdateUserInfo = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
   const [state, setState] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
-  const {token, email, names, phone} = useSelector(
-    (state: RootState) => state.user as IUser,
-  );
+  const userReducer = useSelector((state: RootState) => state.user as IUser);
 
   useEffect(() => {
-    setState({names: names, email: email, phone: phone});
+    setState({
+      names: userReducer.names,
+      email: userReducer.email,
+      phone: userReducer.phone,
+    });
   }, []);
 
   const handleSubmit = () => {
@@ -66,13 +63,19 @@ const UpdateUserInfo = ({navigation}: INavigationProp) => {
     }
     setIsLoading(true);
     axios
-      .put(app.BACKEND_URL + '/suppliers/info', state, setHeaders(token))
+      .put(
+        app.BACKEND_URL + '/suppliers/info',
+        state,
+        setHeaders(userReducer.token),
+      )
       .then(res => {
         toastMessage(TOAST_MESSAGE_TYPES.SUCCESS, res.data.msg);
-        dispatch(setUserToken(res.data.token));
-        dispatch(setUserNames(state.names));
-        dispatch(setUserPhone(state.phone));
-        dispatch(setUserEmail(state.email));
+        setUser({
+          ...userReducer,
+          names: state.names,
+          phone: state.phone,
+          email: state.email,
+        });
         setIsLoading(false);
         navigation.goBack();
       })
