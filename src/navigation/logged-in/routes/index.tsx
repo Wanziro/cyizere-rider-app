@@ -25,13 +25,11 @@ import Wallet from '../../../screens/logged-in/wallet';
 import {fetchWalletTransactions} from '../../../actions/walletTransactions';
 import VerificationDetails from '../../../screens/logged-in/verification-details';
 import DocumentPreview from '../../../screens/logged-in/document-preview';
-import OrderDetails from '../../../screens/logged-in/order-details';
 import AccountSettings from '../../../screens/logged-in/account-settings';
 import UpdateUserInfo from '../../../screens/logged-in/update-user-info';
 import ChangePassword from '../../../screens/logged-in/change-password';
 import DeleteAccount from '../../../screens/logged-in/delete-account';
 import HelpAndSupport from '../../../screens/logged-in/help-and-support';
-import AddProduct from '../../../screens/logged-in/add-product';
 import EditProduct from '../../../screens/logged-in/edit-product';
 import ProductPrices from '../../../screens/logged-in/product-prices';
 import VisibleProducts from '../../../screens/logged-in/products/visible-products';
@@ -43,6 +41,7 @@ import AddPackaging from '../../../screens/logged-in/add-packaging';
 import EditPackagingOption from '../../../screens/logged-in/edit-packaging-option';
 import AddGift from '../../../screens/logged-in/add-gift';
 import EditGift from '../../../screens/logged-in/edit-gift';
+import WaitingOrders from '../../../screens/logged-in/orders/waiting-orders';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const TopTab = createMaterialTopTabNavigator();
@@ -68,17 +67,17 @@ function LoggedInRoutes() {
         }}>
         <TopTab.Screen
           options={{
+            tabBarLabel: 'Waiting',
+          }}
+          name="WaitingOrders"
+          component={WaitingOrders}
+        />
+        <TopTab.Screen
+          options={{
             tabBarLabel: 'Pending',
           }}
           name="PendingOrders"
           component={PendingOrders}
-        />
-        <TopTab.Screen
-          options={{
-            tabBarLabel: 'Failed',
-          }}
-          name="AcceptedOrders"
-          component={FailedOrders}
         />
         <TopTab.Screen
           options={{
@@ -204,33 +203,6 @@ function LoggedInRoutes() {
         />
 
         <Tab.Screen
-          name="Orders"
-          component={OrdersTab}
-          options={
-            ordersCount > 0
-              ? {
-                  headerShown: true,
-                  headerTitleAlign: 'center',
-                  headerTintColor: APP_COLORS.WHITE,
-                  headerStyle: {backgroundColor: APP_COLORS.ORANGE},
-                  tabBarIcon: ({focused, color, size}) => {
-                    return <Icon name="shopping" color={color} size={size} />;
-                  },
-                  tabBarBadge: ordersCount,
-                }
-              : {
-                  headerShown: true,
-                  headerTitleAlign: 'center',
-                  headerTintColor: APP_COLORS.WHITE,
-                  headerStyle: {backgroundColor: APP_COLORS.ORANGE},
-                  tabBarIcon: ({focused, color, size}) => {
-                    return <Icon name="shopping" color={color} size={size} />;
-                  },
-                }
-          }
-        />
-
-        <Tab.Screen
           name="Profile"
           component={Profile}
           options={{
@@ -305,19 +277,6 @@ function LoggedInRoutes() {
               backgroundColor: APP_COLORS.ORANGE,
             },
             headerShadowVisible: false,
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-          })}
-        />
-
-        <Stack.Screen
-          name="OrderDetails"
-          component={OrderDetails}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Order Details',
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
             headerTitleAlign: 'center',
             headerTintColor: APP_COLORS.WHITE,
           })}

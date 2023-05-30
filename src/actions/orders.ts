@@ -49,7 +49,7 @@ export const fetchOrders = (): any => (dispatch: any, getState: any) => {
   dispatch(setLoadingOrdersError(''));
   const {user} = getState();
   axios
-    .get(app.BACKEND_URL + '/orders/suppliers', setHeaders(user.token))
+    .get(app.BACKEND_URL + '/orders/riders', setHeaders(user.token))
     .then(res => {
       dispatch(setIsLoadingOrders(false));
       dispatch(setIsHardReloadingOrders(false));

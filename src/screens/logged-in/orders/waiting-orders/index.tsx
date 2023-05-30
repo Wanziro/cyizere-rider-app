@@ -6,15 +6,17 @@ import {RootState} from '../../../../reducers';
 import Loader from '../loader';
 import {INavigationProp, PAYMENT_STATUS_ENUM} from '../../../../../interfaces';
 import NotFound from '../../../../components/not-found';
-import Item from './item';
 import {fetchOrders} from '../../../../actions/orders';
+import Item from './item';
+import {fetchProducts} from '../../../../actions/products';
 
-const PendingOrders = ({navigation}: INavigationProp) => {
+const WaitingOrders = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
   const {orders, isLoading} = useSelector((state: RootState) => state.orders);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
+    dispatch(fetchProducts());
     dispatch(fetchOrders());
   }, []);
 
@@ -49,20 +51,18 @@ const PendingOrders = ({navigation}: INavigationProp) => {
         }>
         {isLoading && orders.length === 0 ? (
           <Loader />
-        ) : orders.filter(
-            item => item.paymentStatus === PAYMENT_STATUS_ENUM.SUCCESS,
-          ).length > 0 ? (
+        ) : orders.filter(item => item.riderId === null).length > 0 ? (
           orders
-            .filter(item => item.paymentStatus === PAYMENT_STATUS_ENUM.SUCCESS)
+            .filter(item => item.riderId === null)
             .map((item, index) => (
               <Item item={item} key={index} navigation={navigation} />
             ))
         ) : (
-          <NotFound title="You don't have any completed order" />
+          <NotFound title={'There is no order waiting for delivery now'} />
         )}
       </ScrollView>
     </View>
   );
 };
 
-export default PendingOrders;
+export default WaitingOrders;

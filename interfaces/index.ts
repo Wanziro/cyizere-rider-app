@@ -320,33 +320,37 @@ export enum PAYMENT_STATUS_ENUM {
   SUCCESS = 'SUCCESS',
 }
 
+export enum DELIVERY_STATUS_ENUM {
+  WAITING = 'WAITING',
+  PENDING = 'PENDING',
+  FAILED = 'FAILED',
+  COMPLETED = 'COMPLETED',
+}
+
 export interface IOrder {
   id: number;
-  marketId: number;
+  supplierId: number;
   userId: number;
   cartItems: ICartItem[];
   cartTotalAmount: number;
-  distance: number;
-  paymentMethod: string;
-  paymentPhoneNumber: number;
-  deliveryAddress: ILocation;
-  deliveryVehicle: IDeliveryFee;
-  deliveryFees: number;
-  deliveryStatus: string;
-  transactionId: string;
-  agentId: number | null;
-  riderId: number | null;
-  confirmationRiderId: number | null;
-  isRiderConfirmed: boolean;
-  paymentStatus: PAYMENT_STATUS_ENUM;
-  failureReason: string;
-  areAllSuppliersPaid: boolean;
-  acceptedAt: string;
-  sentAt: string;
-  deliveredAt: string;
-  packagingFees: number;
   systemFees: number;
-  agentFees: number;
+  packagingFees: number;
+  distance: number;
+  paymentMethod: number;
+  paymentPhoneNumber: string;
+  deliveryAddress: ILocation;
+  deliveryFees: number;
+  deliveryStatus: DELIVERY_STATUS_ENUM;
+  transactionId: string;
+  paymentStatus: PAYMENT_STATUS_ENUM;
+  acceptedAt: string;
+  deliveredAt: string;
+  riderId: number | null;
+  failureReason: string;
+  gift: IGift | null;
+  client: IClient;
+  packagingOption: IPackagingOption | null;
+  packagingColor: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -546,4 +550,8 @@ export enum USER_TYPE_ENUM {
   AGENT = 'AGENT',
   RIDER = 'RIDER',
   CLIENT = 'CLIENT',
+}
+export enum orderTypesEnum {
+  NORMAL = 'NORMAL',
+  GIFT = 'GIFT',
 }

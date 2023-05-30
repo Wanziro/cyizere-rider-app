@@ -37,7 +37,7 @@ export const fetchProducts = (): any => (dispatch: any, getState: any) => {
   const {user} = getState();
   dispatch(setIsLoadingProducts(true));
   axios
-    .get(app.BACKEND_URL + '/products/mine', setHeaders(user.token))
+    .get(app.BACKEND_URL + '/products/')
     .then(res => {
       dispatch(setIsLoadingProducts(false));
       dispatch({
