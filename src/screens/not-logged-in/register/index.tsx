@@ -120,7 +120,6 @@ const Register = ({navigation}: INavigationProp) => {
             idNumberDocument,
             email,
             phone,
-            password,
             walletAmounts,
             isActive,
             isVerified,
@@ -130,7 +129,7 @@ const Register = ({navigation}: INavigationProp) => {
             lng,
             isDisabled,
             token,
-          } = response.supplier;
+          } = response.rider;
           dispatch(
             setUser({
               riderId,

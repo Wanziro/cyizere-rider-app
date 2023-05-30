@@ -56,7 +56,7 @@ const Login = ({navigation}: INavigationProp) => {
           lng,
           isDisabled,
           token,
-        } = res.data.supplier;
+        } = res.data.rider;
         dispatch(
           setUser({
             riderId,

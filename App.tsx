@@ -6,7 +6,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
 import Navigation from './src/navigation';
 import {subscribeToSocket, unSubscribeToSocket} from './src/worker/socket';
-import {saveAppToken, setFbToken} from './src/actions/user';
+import {saveAppToken} from './src/actions/user';
 
 import Toast, {BaseToast} from 'react-native-toast-message';
 import {APP_COLORS} from './src/constants/colors';
