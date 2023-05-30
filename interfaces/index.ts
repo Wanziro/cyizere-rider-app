@@ -41,27 +41,22 @@ export interface IGift {
 
 export interface IUser {
   token: string;
+
+  riderId: number;
   names: string;
-  phone: string;
-  walletAmounts: number;
-  email: string;
-  idNumber: number;
+  idNumber: string;
   idNumberDocument: string;
-  isVerified: boolean;
-  verificationStatus: VerificationStatusEnum;
-  verificationMessage: string;
-  isDisabled: boolean;
+  email: string;
+  phone: string;
+
+  walletAmounts: number;
   isActive: boolean;
-  hasGift: boolean;
-  supplierId: number;
-  shopName: string;
-  shopAddress: string;
-  shopCategoryId: number;
-  shopLat: string;
-  shopLong: string;
-  open: string;
-  close: string;
-  shopImage: string;
+  isVerified: boolean;
+  verificationStatus: string;
+  verificationMessage: string;
+  lat: string;
+  lng: string;
+  isDisabled: boolean;
 
   fbToken: string;
 }

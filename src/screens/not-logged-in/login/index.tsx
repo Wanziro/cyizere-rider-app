@@ -1,58 +1,24 @@
 import {
   View,
   Text,
-  Dimensions,
   Image,
   TextInput,
-  ScrollView,
-  Pressable,
-  ActivityIndicator,
   KeyboardAvoidingView,
   StatusBar,
 } from 'react-native';
 import React, {useState} from 'react';
 import {APP_COLORS} from '../../../constants/colors';
-import {
-  btnWithBgContainerStyles,
-  btnWithBgTextStyles,
-  btnWithoutBgContainerStyles,
-  btnWithoutBgTextStyles,
-  commonInput,
-  viewFlexCenter,
-  viewFlexSpace,
-} from '../../../constants/styles';
 
 import {INavigationProp, TOAST_MESSAGE_TYPES} from '../../../../interfaces';
 import {errorHandler, toastMessage} from '../../../helpers';
 import axios from 'axios';
 import {app} from '../../../constants/app';
-import {useDispatch} from 'react-redux';
-import {
-  setIsUserActive,
-  setIsUserDisabled,
-  setIsUserVerified,
-  setUserEmail,
-  setUserHasShop,
-  setUserId,
-  setUserIdNumber,
-  setUserIdNumberDocument,
-  setUserNames,
-  setUserPhone,
-  setUserShopAddress,
-  setUserShopCategoryId,
-  setUserShopClose,
-  setUserShopImage,
-  setUserShopLat,
-  setUserShopLong,
-  setUserShopName,
-  setUserShopOpen,
-  setUserToken,
-  setUserVerificationMessage,
-  setUserVerificationStatus,
-} from '../../../actions/user';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUser} from '../../../actions/user';
 import SubmitButton from '../../../components/submit-button';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import FullPageLoader from '../../../components/full-page-loader';
+import {RootState} from '../../../reducers';
 
 const initialState = {
   emailOrPhone: '',
@@ -60,6 +26,7 @@ const initialState = {
 };
 const Login = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
+  const {fbToken} = useSelector((state: RootState) => state.user);
   const [state, setState] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -70,55 +37,46 @@ const Login = ({navigation}: INavigationProp) => {
     }
     setIsLoading(true);
     axios
-      .post(app.BACKEND_URL + '/suppliers/login/', {...state})
+      .post(app.BACKEND_URL + '/riders/login/', {...state})
       .then(res => {
         setIsLoading(false);
         const {
-          supplierId,
+          riderId,
           names,
           idNumber,
           idNumberDocument,
           email,
           phone,
-          shopName,
-          shopAddress,
-          shopCategoryId,
-          shopLat,
-          shopLong,
-          open,
-          close,
-          shopImage,
+          walletAmounts,
           isActive,
           isVerified,
           verificationStatus,
           verificationMessage,
+          lat,
+          lng,
           isDisabled,
           token,
-          hasGift,
         } = res.data.supplier;
-        dispatch(setUserId(supplierId));
-        dispatch(setUserNames(names));
-        dispatch(setUserPhone(phone));
-        dispatch(setUserShopImage(shopImage));
-        dispatch(setUserEmail(email));
-        dispatch(setUserIdNumber(idNumber));
-        dispatch(setUserIdNumberDocument(idNumberDocument));
-        dispatch(setIsUserActive(isActive));
-        dispatch(setIsUserDisabled(isDisabled));
-        dispatch(setIsUserVerified(isVerified));
-        dispatch(setUserVerificationStatus(verificationStatus));
-        dispatch(setUserVerificationMessage(verificationMessage));
-        //
-        dispatch(setUserShopName(shopName));
-        dispatch(setUserShopAddress(shopAddress));
-        dispatch(setUserShopCategoryId(shopCategoryId));
-        dispatch(setUserShopLat(shopLat));
-        dispatch(setUserShopLong(shopLong));
-        dispatch(setUserShopOpen(open));
-        dispatch(setUserShopClose(close));
-        dispatch(setUserHasShop(hasGift));
-        //
-        dispatch(setUserToken(token));
+        dispatch(
+          setUser({
+            riderId,
+            names,
+            idNumber,
+            idNumberDocument,
+            email,
+            phone,
+            walletAmounts,
+            isActive,
+            isVerified,
+            verificationStatus,
+            verificationMessage,
+            lat,
+            lng,
+            isDisabled,
+            token,
+            fbToken,
+          }),
+        );
         toastMessage(TOAST_MESSAGE_TYPES.SUCCESS, res.data.msg);
       })
       .catch(error => {

@@ -7,35 +7,14 @@ import {INavigationProp, TOAST_MESSAGE_TYPES} from '../../../../interfaces';
 import {toastMessage} from '../../../helpers';
 import {app} from '../../../constants/app';
 import DocumentPicker from 'react-native-document-picker';
-import {
-  setIsUserActive,
-  setIsUserDisabled,
-  setIsUserVerified,
-  setUserEmail,
-  setUserHasShop,
-  setUserId,
-  setUserIdNumber,
-  setUserIdNumberDocument,
-  setUserNames,
-  setUserPhone,
-  setUserShopAddress,
-  setUserShopCategoryId,
-  setUserShopClose,
-  setUserShopImage,
-  setUserShopLat,
-  setUserShopLong,
-  setUserShopName,
-  setUserShopOpen,
-  setUserToken,
-  setUserVerificationMessage,
-  setUserVerificationStatus,
-} from '../../../actions/user';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import FullPageLoader from '../../../components/full-page-loader';
 import Inputs from './inputs/inputs';
 import StepsHeader from './steps-header';
 import StepsFooter from './steps-footer';
 import {fetchShopCategories} from '../../../actions/shopCategories';
+import {setUser} from '../../../actions/user';
+import {RootState} from '../../../reducers';
 
 export enum REGISTER_STEPS_ENUM {
   PERSONAL_INFO = 'PERSONAL_INFO',
@@ -75,6 +54,7 @@ const initialState = {
 };
 const Register = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
+  const {fbToken} = useSelector((state: RootState) => state.user);
   const [state, setState] = useState<IState>(initialState);
   const [activeStep, setActiveStep] = useState<REGISTER_STEPS_ENUM>(
     REGISTER_STEPS_ENUM.PERSONAL_INFO,
@@ -125,7 +105,7 @@ const Register = ({navigation}: INavigationProp) => {
       }),
     );
     setIsLoading(true);
-    const url = app.BACKEND_URL + '/suppliers/register/';
+    const url = app.BACKEND_URL + '/riders/register/';
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url);
     xhr.onload = function () {
@@ -134,51 +114,43 @@ const Register = ({navigation}: INavigationProp) => {
         const response = JSON.parse(xhr.response);
         if (xhr.status === 201) {
           const {
-            supplierId,
+            riderId,
             names,
             idNumber,
             idNumberDocument,
             email,
             phone,
-            shopName,
-            shopAddress,
-            shopCategoryId,
-            shopLat,
-            shopLong,
-            open,
-            close,
-            shopImage,
+            password,
+            walletAmounts,
             isActive,
             isVerified,
             verificationStatus,
             verificationMessage,
+            lat,
+            lng,
             isDisabled,
-            hasGift,
             token,
           } = response.supplier;
-          dispatch(setUserId(supplierId));
-          dispatch(setUserNames(names));
-          dispatch(setUserPhone(phone));
-          dispatch(setUserShopImage(shopImage));
-          dispatch(setUserEmail(email));
-          dispatch(setUserIdNumber(idNumber));
-          dispatch(setUserIdNumberDocument(idNumberDocument));
-          dispatch(setIsUserActive(isActive));
-          dispatch(setIsUserDisabled(isDisabled));
-          dispatch(setIsUserVerified(isVerified));
-          dispatch(setUserVerificationStatus(verificationStatus));
-          dispatch(setUserVerificationMessage(verificationMessage));
-          //
-          dispatch(setUserShopName(shopName));
-          dispatch(setUserShopAddress(shopAddress));
-          dispatch(setUserShopCategoryId(shopCategoryId));
-          dispatch(setUserShopLat(shopLat));
-          dispatch(setUserShopLong(shopLong));
-          dispatch(setUserShopOpen(open));
-          dispatch(setUserShopClose(close));
-          dispatch(setUserHasShop(hasGift));
-          //
-          dispatch(setUserToken(token));
+          dispatch(
+            setUser({
+              riderId,
+              names,
+              idNumber,
+              idNumberDocument,
+              email,
+              phone,
+              walletAmounts,
+              isActive,
+              isVerified,
+              verificationStatus,
+              verificationMessage,
+              lat,
+              lng,
+              isDisabled,
+              token,
+              fbToken,
+            }),
+          );
           toastMessage(TOAST_MESSAGE_TYPES.SUCCESS, response.msg);
         } else {
           toastMessage(TOAST_MESSAGE_TYPES.ERROR, response.msg);
