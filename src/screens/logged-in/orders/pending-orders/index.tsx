@@ -4,13 +4,14 @@ import {APP_COLORS} from '../../../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../reducers';
 import Loader from '../loader';
-import {INavigationProp, PAYMENT_STATUS_ENUM} from '../../../../../interfaces';
+import {DELIVERY_STATUS_ENUM, INavigationProp} from '../../../../../interfaces';
 import NotFound from '../../../../components/not-found';
 import Item from './item';
 import {fetchOrders} from '../../../../actions/orders';
 
 const PendingOrders = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
+  const {riderId} = useSelector((state: RootState) => state.user);
   const {orders, isLoading} = useSelector((state: RootState) => state.orders);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -50,15 +51,21 @@ const PendingOrders = ({navigation}: INavigationProp) => {
         {isLoading && orders.length === 0 ? (
           <Loader />
         ) : orders.filter(
-            item => item.paymentStatus === PAYMENT_STATUS_ENUM.SUCCESS,
+            item =>
+              item.deliveryStatus === DELIVERY_STATUS_ENUM.PENDING &&
+              item.riderId === riderId,
           ).length > 0 ? (
           orders
-            .filter(item => item.paymentStatus === PAYMENT_STATUS_ENUM.SUCCESS)
+            .filter(
+              item =>
+                item.deliveryStatus === DELIVERY_STATUS_ENUM.PENDING &&
+                item.riderId === riderId,
+            )
             .map((item, index) => (
               <Item item={item} key={index} navigation={navigation} />
             ))
         ) : (
-          <NotFound title="You don't have any completed order" />
+          <NotFound title="You don't have any pending order" />
         )}
       </ScrollView>
     </View>

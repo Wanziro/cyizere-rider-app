@@ -23,84 +23,81 @@ const Item = ({item, navigation}: IItemProps) => {
     }
   }, [item]);
   return (
-    <Pressable
-      onPress={() => navigation.navigate('OrderPreview', {order: item})}>
-      <WhiteCard style={{marginBottom: 10}}>
-        <View style={[viewFlexSpace]}>
-          <View>
-            <Image
-              source={{uri: app.FILE_URL + product?.image}}
-              style={{width: 100, height: 100}}
-              resizeMode="contain"
-            />
+    <WhiteCard style={{marginBottom: 10}}>
+      <View style={[viewFlexSpace]}>
+        <View>
+          <Image
+            source={{uri: app.FILE_URL + product?.image}}
+            style={{width: 100, height: 100}}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={{flex: 1, padding: 10}}>
+          <View style={[viewFlexSpace, {alignItems: 'flex-start'}]}>
+            <Text
+              style={{
+                color: APP_COLORS.BLACK,
+                fontWeight: '600',
+                flex: 1,
+                marginRight: 5,
+              }}>
+              {product?.name}
+            </Text>
+            <Text style={{color: APP_COLORS.BLACK, fontWeight: '600'}}>
+              Order Id: #{item.id}
+            </Text>
           </View>
-          <View style={{flex: 1, padding: 10}}>
-            <View style={[viewFlexSpace, {alignItems: 'flex-start'}]}>
-              <Text
-                style={{
-                  color: APP_COLORS.BLACK,
-                  fontWeight: '600',
-                  flex: 1,
-                  marginRight: 5,
-                }}>
-                {product?.name}
+          <View style={[viewFlexSpace, {alignItems: 'flex-start'}]}>
+            <View>
+              <Text style={{color: APP_COLORS.TEXT_GRAY}}>
+                {item.cartItems.length} Items
               </Text>
-              <Text style={{color: APP_COLORS.BLACK, fontWeight: '600'}}>
-                Order Id: #{item.id}
-              </Text>
-            </View>
-            <View style={[viewFlexSpace, {alignItems: 'flex-start'}]}>
-              <View>
-                <Text style={{color: APP_COLORS.TEXT_GRAY}}>
-                  {item.cartItems.length} Items
-                </Text>
-                <Text style={{color: APP_COLORS.TEXT_GRAY}}>
-                  {currencyFormatter(
-                    Number(item.cartTotalAmount) + Number(item.deliveryFees),
-                    // +
-                    // Number(item.packagingFees) +
-                    // Number(item.systemFees) +
-                    // Number(item.agentFees),
-                  )}{' '}
-                  RWF
-                </Text>
-              </View>
-              <Text
-                style={{
-                  color: APP_COLORS.TEXT_GRAY,
-                  width: '50%',
-                  textAlign: 'right',
-                }}>
-                {new Date(item.createdAt).toUTCString()}
+              <Text style={{color: APP_COLORS.TEXT_GRAY}}>
+                {currencyFormatter(
+                  Number(item.cartTotalAmount) +
+                    Number(item.deliveryFees) +
+                    Number(item.packagingFees) +
+                    Number(item.systemFees),
+                )}{' '}
+                RWF
               </Text>
             </View>
-            <View style={[viewFlexSpace, {alignItems: 'flex-start'}]}>
-              <View style={{flex: 1}}>
-                <Text style={{color: APP_COLORS.BLACK, fontWeight: 'bold'}}>
-                  Delivery Status:
-                </Text>
-              </View>
-              <Text
-                style={{
-                  color: APP_COLORS.WHITE,
-                  backgroundColor:
-                    item.deliveryStatus === 'Waiting'
-                      ? APP_COLORS.DARK_GRAY
-                      : item.deliveryStatus === 'COMPLETED'
-                      ? APP_COLORS.GREEN
-                      : APP_COLORS.WARNING,
-                  paddingHorizontal: 5,
-                  borderRadius: 3,
-                }}>
-                {item.deliveryStatus.toUpperCase() === 'PENDING'
-                  ? 'On The Way'
-                  : item.deliveryStatus}
+            <Text
+              style={{
+                color: APP_COLORS.TEXT_GRAY,
+                width: '50%',
+                textAlign: 'right',
+              }}>
+              {new Date(item.createdAt).toUTCString()}
+            </Text>
+          </View>
+          <View style={[viewFlexSpace, {alignItems: 'flex-start'}]}>
+            <View style={{flex: 1}}>
+              <Text style={{color: APP_COLORS.BLACK, fontWeight: 'bold'}}>
+                Delivery Status:
               </Text>
             </View>
+            <Text>{item.deliveryStatus}</Text>
           </View>
         </View>
-      </WhiteCard>
-    </Pressable>
+      </View>
+      <View
+        style={[
+          viewFlexSpace,
+          {
+            padding: 10,
+            borderTopColor: APP_COLORS.BORDER_COLOR,
+            borderTopWidth: 1,
+          },
+        ]}>
+        <Pressable
+          onPress={() => navigation.navigate('OrderPreview', {order: item})}>
+          <Text>View Order</Text>
+        </Pressable>
+        <Text>Call Client</Text>
+        <Text>View Route</Text>
+      </View>
+    </WhiteCard>
   );
 };
 
