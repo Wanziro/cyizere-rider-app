@@ -113,7 +113,10 @@ const Item = ({item, navigation}: IItemProps) => {
         <Pressable onPress={() => handleCall()}>
           <Text style={{color: APP_COLORS.BLACK}}>Call Client</Text>
         </Pressable>
-        <Text style={{color: APP_COLORS.BLACK}}>View Route</Text>
+        <Pressable
+          onPress={() => navigation.navigate('ViewRoute', {order: item})}>
+          <Text style={{color: APP_COLORS.BLACK}}>View Route</Text>
+        </Pressable>
       </View>
     </WhiteCard>
   );

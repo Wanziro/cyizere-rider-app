@@ -42,6 +42,7 @@ import EditPackagingOption from '../../../screens/logged-in/edit-packaging-optio
 import AddGift from '../../../screens/logged-in/add-gift';
 import EditGift from '../../../screens/logged-in/edit-gift';
 import WaitingOrders from '../../../screens/logged-in/orders/waiting-orders';
+import ViewRoute from '../../../screens/logged-in/view-route';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const TopTab = createMaterialTopTabNavigator();
@@ -444,15 +445,11 @@ function LoggedInRoutes() {
           })}
         />
         <Stack.Screen
-          name="EditGift"
-          component={EditGift}
+          name="ViewRoute"
+          component={ViewRoute}
           options={({route, navigation}: INavigationProp) => ({
-            title: 'Editing: ' + route?.params?.gift?.name,
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
+            title: '',
+            headerShown: false,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           })}
         />
