@@ -1,6 +1,7 @@
 import {View, Text, ScrollView, Pressable} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {
+  DELIVERY_STATUS_ENUM,
   INavigationPropWithRouteRequired,
   IOrder,
   PAYMENT_STATUS_ENUM,
@@ -33,7 +34,7 @@ const OrderPreview = ({
   const {order} = route.params as {order: IOrder};
   const [orderToUse, setOrderToUse] = useState<IOrder | undefined>(undefined);
   const {orders} = useSelector((state: RootState) => state.orders);
-  const {token} = useSelector((state: RootState) => state.user);
+  const {token, riderId} = useSelector((state: RootState) => state.user);
 
   const [isLoading, setIsLoading] = useState(false);
   const [showAcceptOrder, setShowAcceptOrder] = useState(false);
@@ -237,6 +238,43 @@ const OrderPreview = ({
             </View>
           </>
         )}
+        {orderToUse?.riderId === riderId &&
+          order.deliveryStatus === DELIVERY_STATUS_ENUM.PENDING && (
+            <>
+              <View
+                style={[
+                  viewFlexSpace,
+                  {
+                    borderBottomColor: APP_COLORS.BORDER_COLOR,
+                    borderBottomWidth: 1,
+                    padding: 10,
+                  },
+                ]}>
+                <Text style={{color: APP_COLORS.BLACK, fontWeight: '600'}}>
+                  Client Name:
+                </Text>
+                <Text style={{color: APP_COLORS.TEXT_GRAY}}>
+                  {orderToUse?.client.names}
+                </Text>
+              </View>
+              <View
+                style={[
+                  viewFlexSpace,
+                  {
+                    borderBottomColor: APP_COLORS.BORDER_COLOR,
+                    borderBottomWidth: 1,
+                    padding: 10,
+                  },
+                ]}>
+                <Text style={{color: APP_COLORS.BLACK, fontWeight: '600'}}>
+                  Client Phone:
+                </Text>
+                <Text style={{color: APP_COLORS.TEXT_GRAY}}>
+                  {orderToUse?.client.phone}
+                </Text>
+              </View>
+            </>
+          )}
         <View
           style={[
             viewFlexSpace,

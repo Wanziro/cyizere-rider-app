@@ -81,6 +81,7 @@ export interface IAppConfig {
   BACKEND_URL: string;
   FILE_URL: string;
   SOCKET_URL: string;
+  GOOGLE_MAPS_API_KEY: string;
 }
 
 export interface INavigationProp {

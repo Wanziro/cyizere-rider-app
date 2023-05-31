@@ -1,13 +1,18 @@
-import {View, Text, Image, Pressable} from 'react-native';
+import {View, Text, Image, Pressable, Linking} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import WhiteCard from '../../../../../components/white-card';
 import {viewFlexSpace} from '../../../../../constants/styles';
-import {INavigationProp, IOrder, IProduct} from '../../../../../../interfaces';
+import {
+  INavigationProp,
+  IOrder,
+  IProduct,
+  TOAST_MESSAGE_TYPES,
+} from '../../../../../../interfaces';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../../../reducers';
 import {app} from '../../../../../constants/app';
 import {APP_COLORS} from '../../../../../constants/colors';
-import {currencyFormatter} from '../../../../../helpers';
+import {currencyFormatter, toastMessage} from '../../../../../helpers';
 interface IItemProps extends INavigationProp {
   item: IOrder;
 }
@@ -22,6 +27,17 @@ const Item = ({item, navigation}: IItemProps) => {
       }
     }
   }, [item]);
+
+  const handleCall = () => {
+    if (item.client.phone) {
+      Linking.openURL(`tel:${item.client.phone}`);
+    } else {
+      toastMessage(
+        TOAST_MESSAGE_TYPES.INFO,
+        "Something went wrong, can't call client",
+      );
+    }
+  };
   return (
     <WhiteCard style={{marginBottom: 10}}>
       <View style={[viewFlexSpace]}>
@@ -92,10 +108,12 @@ const Item = ({item, navigation}: IItemProps) => {
         ]}>
         <Pressable
           onPress={() => navigation.navigate('OrderPreview', {order: item})}>
-          <Text>View Order</Text>
+          <Text style={{color: APP_COLORS.BLACK}}>View Order</Text>
         </Pressable>
-        <Text>Call Client</Text>
-        <Text>View Route</Text>
+        <Pressable onPress={() => handleCall()}>
+          <Text style={{color: APP_COLORS.BLACK}}>Call Client</Text>
+        </Pressable>
+        <Text style={{color: APP_COLORS.BLACK}}>View Route</Text>
       </View>
     </WhiteCard>
   );
