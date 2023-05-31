@@ -7,21 +7,37 @@ import {
   orderTypesEnum,
 } from '../../../../interfaces';
 import {APP_COLORS} from '../../../constants/colors';
-import {viewFlexSpace} from '../../../constants/styles';
+import {viewFlexCenter, viewFlexSpace} from '../../../constants/styles';
 import Icon from 'react-native-vector-icons/Entypo';
 import Item from './item';
-import {currencyFormatter} from '../../../helpers';
-import {useSelector} from 'react-redux';
+import {
+  currencyFormatter,
+  normalAlert,
+  returnErroMessage,
+  setHeaders,
+} from '../../../helpers';
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../reducers';
 import SubmitButton from '../../../components/submit-button';
+import CustomModal from '../../../components/custom-modal';
+import axios from 'axios';
+import {app} from '../../../constants/app';
+import {fetchNotifications} from '../../../actions/notifications';
+import FullPageLoader from '../../../components/full-page-loader';
 
 const OrderPreview = ({
   navigation,
   route,
 }: INavigationPropWithRouteRequired) => {
+  const dispatch = useDispatch();
   const {order} = route.params as {order: IOrder};
   const [orderToUse, setOrderToUse] = useState<IOrder | undefined>(undefined);
   const {orders} = useSelector((state: RootState) => state.orders);
+  const {token} = useSelector((state: RootState) => state.user);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [showAcceptOrder, setShowAcceptOrder] = useState(false);
+
   useEffect(() => {
     let sub = true;
     if (sub) {
@@ -36,6 +52,37 @@ const OrderPreview = ({
       sub = false;
     };
   }, [orders]);
+
+  const handleAcceptRequest = () => {
+    setShowAcceptOrder(false);
+    setIsLoading(true);
+    axios
+      .post(
+        app.BACKEND_URL + '/orders/riders/accept/',
+        {orderId: order.id},
+        setHeaders(token),
+      )
+      .then(res => {
+        setIsLoading(false);
+        dispatch(fetchNotifications());
+        normalAlert({
+          message: res.data.msg,
+          okHandler: () => navigation.goBack(),
+          cancelHandler: () => navigation.goBack(),
+        });
+      })
+      .catch(error => {
+        setIsLoading(false);
+        const msg = returnErroMessage(error);
+        normalAlert({
+          message: msg,
+          hasCancleBtn: true,
+          cancelText: 'Close',
+          okText: 'Try agin',
+          okHandler: handleAcceptRequest,
+        });
+      });
+  };
 
   return (
     <View
@@ -223,10 +270,35 @@ const OrderPreview = ({
         )}
         <View style={{marginHorizontal: 10, marginVertical: 20}}>
           {orderToUse?.riderId === null && (
-            <SubmitButton title="Deliver this order" />
+            <SubmitButton
+              title="Deliver this order"
+              buttonProps={{onPress: () => setShowAcceptOrder(true)}}
+            />
           )}
         </View>
       </ScrollView>
+      <CustomModal isVisible={showAcceptOrder}>
+        <View style={[viewFlexCenter]}>
+          <Text style={{color: APP_COLORS.ORANGE, fontWeight: '600'}}>
+            Confirmation
+          </Text>
+          <Text style={{color: APP_COLORS.BLACK, marginTop: 10}}>
+            Do you want to start delivering this order?
+          </Text>
+          <View style={{width: '100%', marginTop: 10}}>
+            <SubmitButton
+              title="Yes, I confirm"
+              buttonProps={{onPress: () => handleAcceptRequest()}}
+            />
+            <SubmitButton
+              buttonProps={{onPress: () => setShowAcceptOrder(false)}}
+              title="Close"
+              containerStyle={{backgroundColor: APP_COLORS.OXFORD_BLUE}}
+            />
+          </View>
+        </View>
+      </CustomModal>
+      <FullPageLoader isLoading={isLoading} />
     </View>
   );
 };
