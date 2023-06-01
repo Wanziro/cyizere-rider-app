@@ -3,7 +3,6 @@ import {LogBox} from 'react-native';
 import {Provider} from 'react-redux';
 import {store, persistor} from './src/store';
 import {PersistGate} from 'redux-persist/integration/react';
-import {AlertNotificationRoot} from 'react-native-alert-notification';
 import Navigation from './src/navigation';
 import {subscribeToSocket, unSubscribeToSocket} from './src/worker/socket';
 import {saveAppToken} from './src/actions/user';

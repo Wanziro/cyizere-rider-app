@@ -22,10 +22,15 @@ import FullPageLoader from '../../../../components/full-page-loader';
 import axios from 'axios';
 import {app} from '../../../../constants/app';
 import {fetchNotifications} from '../../../../actions/notifications';
+import {fetchProductPrices} from '../../../../actions/productPrices';
+import {fetchProducts} from '../../../../actions/products';
+import NotVerified from '../../../../components/not-verified';
 
 const PendingOrders = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
-  const {riderId, token} = useSelector((state: RootState) => state.user);
+  const {riderId, token, isVerified} = useSelector(
+    (state: RootState) => state.user,
+  );
   const {orders, isLoading} = useSelector((state: RootState) => state.orders);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -37,7 +42,11 @@ const PendingOrders = ({navigation}: INavigationProp) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchOrders());
+    if (isVerified) {
+      dispatch(fetchOrders());
+      dispatch(fetchProductPrices());
+      dispatch(fetchProducts());
+    }
   }, []);
 
   useEffect(() => {
@@ -53,6 +62,8 @@ const PendingOrders = ({navigation}: INavigationProp) => {
   const onRefresh = () => {
     setRefreshing(true);
     dispatch(fetchOrders());
+    dispatch(fetchProductPrices());
+    dispatch(fetchProducts());
   };
 
   const handleFinishOrder = () => {
@@ -97,124 +108,136 @@ const PendingOrders = ({navigation}: INavigationProp) => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: APP_COLORS.BACKGROUND_COLOR,
-        paddingHorizontal: 10,
-        paddingVertical: 20,
-      }}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{flexGrow: 1}}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        <View style={{flex: 1}}>
-          {isLoading && orders.length === 0 ? (
-            <Loader />
-          ) : orders.filter(
-              item =>
-                item.deliveryStatus === DELIVERY_STATUS_ENUM.PENDING &&
-                item.riderId === riderId,
-            ).length > 0 ? (
-            orders
-              .filter(
-                item =>
-                  item.deliveryStatus === DELIVERY_STATUS_ENUM.PENDING &&
-                  item.riderId === riderId,
-              )
-              .map((item, index) => (
-                <Item
-                  item={item}
-                  key={index}
-                  navigation={navigation}
-                  setSelectedItem={setSelectedItem}
-                  setShowCodeModel={setShowCodeModel}
-                />
-              ))
-          ) : (
-            <NotFound title="You don't have any pending order" />
-          )}
-          <CustomModal isVisible={showCodeModel}>
-            <View style={[viewFlexCenter]}>
-              <Text
-                style={{
-                  color: APP_COLORS.ORANGE,
-                  fontWeight: '600',
-                  fontSize: 16,
-                }}>
-                Finish Delivery for order #{selectedItem?.id}
-              </Text>
-              <View style={{width: '100%', marginVertical: 20}}>
-                <View
-                  style={[
-                    viewFlexSpace,
-                    {
-                      backgroundColor: APP_COLORS.GREY_BUNKER,
-                      padding: 10,
-                      marginBottom: 10,
-                      opacity: 0.7,
-                    },
-                  ]}>
-                  <Icon
-                    name="exclamationcircle"
-                    size={20}
-                    color={APP_COLORS.WHITE}
-                  />
+    <>
+      {!isVerified ? (
+        <NotVerified navigation={navigation} />
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: APP_COLORS.BACKGROUND_COLOR,
+            paddingHorizontal: 10,
+            paddingVertical: 20,
+          }}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{flexGrow: 1}}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
+            <View style={{flex: 1}}>
+              {isLoading && orders.length === 0 ? (
+                <Loader />
+              ) : orders.filter(
+                  item =>
+                    item.deliveryStatus === DELIVERY_STATUS_ENUM.PENDING &&
+                    item.riderId === riderId,
+                ).length > 0 ? (
+                orders
+                  .filter(
+                    item =>
+                      item.deliveryStatus === DELIVERY_STATUS_ENUM.PENDING &&
+                      item.riderId === riderId,
+                  )
+                  .map((item, index) => (
+                    <Item
+                      item={item}
+                      key={index}
+                      navigation={navigation}
+                      setSelectedItem={setSelectedItem}
+                      setShowCodeModel={setShowCodeModel}
+                    />
+                  ))
+              ) : (
+                <NotFound title="You don't have any pending order" />
+              )}
+              <CustomModal isVisible={showCodeModel}>
+                <View style={[viewFlexCenter]}>
                   <Text
-                    style={{color: APP_COLORS.WHITE, flex: 1, marginLeft: 10}}>
-                    Please ask {selectedItem?.client.names} to provide delivery
-                    code
+                    style={{
+                      color: APP_COLORS.ORANGE,
+                      fontWeight: '600',
+                      fontSize: 16,
+                    }}>
+                    Finish Delivery for order #{selectedItem?.id}
                   </Text>
-                </View>
-                <Text style={{color: APP_COLORS.BLACK}}>Delivery Code:</Text>
-                <CustomTextInput
-                  placeHolder="Enter delivery code"
-                  inputProps={{
-                    value: deliveryCode,
-                    onChangeText: txt => setDeliveryCode(txt),
-                  }}
-                />
-              </View>
-              <View style={{width: '100%'}}>
-                <SubmitButton
-                  title="Finish"
-                  buttonProps={{
-                    onPress: () =>
-                      normalAlert({
-                        message:
-                          'Do you want to finish delivery process for this order?',
-                        cancelText: 'No',
-                        cancelHandler: () => {
+                  <View style={{width: '100%', marginVertical: 20}}>
+                    <View
+                      style={[
+                        viewFlexSpace,
+                        {
+                          backgroundColor: APP_COLORS.GREY_BUNKER,
+                          padding: 10,
+                          marginBottom: 10,
+                          opacity: 0.7,
+                        },
+                      ]}>
+                      <Icon
+                        name="exclamationcircle"
+                        size={20}
+                        color={APP_COLORS.WHITE}
+                      />
+                      <Text
+                        style={{
+                          color: APP_COLORS.WHITE,
+                          flex: 1,
+                          marginLeft: 10,
+                        }}>
+                        Please ask {selectedItem?.client.names} to provide
+                        delivery code
+                      </Text>
+                    </View>
+                    <Text style={{color: APP_COLORS.BLACK}}>
+                      Delivery Code:
+                    </Text>
+                    <CustomTextInput
+                      placeHolder="Enter delivery code"
+                      inputProps={{
+                        value: deliveryCode,
+                        onChangeText: txt => setDeliveryCode(txt),
+                      }}
+                    />
+                  </View>
+                  <View style={{width: '100%'}}>
+                    <SubmitButton
+                      title="Finish"
+                      buttonProps={{
+                        onPress: () =>
+                          normalAlert({
+                            message:
+                              'Do you want to finish delivery process for this order?',
+                            cancelText: 'No',
+                            cancelHandler: () => {
+                              setShowCodeModel(false);
+                              setSelectedItem(undefined);
+                              setDeliveryCode('');
+                            },
+                            hasCancleBtn: true,
+                            okText: 'Yes, FInish',
+                            okHandler: handleFinishOrder,
+                          }),
+                      }}
+                    />
+                    <SubmitButton
+                      title="Close"
+                      containerStyle={{backgroundColor: APP_COLORS.OXFORD_BLUE}}
+                      buttonProps={{
+                        onPress: () => {
                           setShowCodeModel(false);
                           setSelectedItem(undefined);
                           setDeliveryCode('');
                         },
-                        hasCancleBtn: true,
-                        okText: 'Yes, FInish',
-                        okHandler: handleFinishOrder,
-                      }),
-                  }}
-                />
-                <SubmitButton
-                  title="Close"
-                  containerStyle={{backgroundColor: APP_COLORS.OXFORD_BLUE}}
-                  buttonProps={{
-                    onPress: () => {
-                      setShowCodeModel(false);
-                      setSelectedItem(undefined);
-                      setDeliveryCode('');
-                    },
-                  }}
-                />
-              </View>
+                      }}
+                    />
+                  </View>
+                </View>
+              </CustomModal>
+              <FullPageLoader isLoading={isSubmitting} />
             </View>
-          </CustomModal>
-          <FullPageLoader isLoading={isSubmitting} />
+          </ScrollView>
         </View>
-      </ScrollView>
-    </View>
+      )}
+    </>
   );
 };
 
