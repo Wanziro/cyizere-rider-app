@@ -63,3 +63,4 @@ buck-out/
 /ios/Pods/
 /vendor/bundle/
 /src/constants/app.ts
+/android/app/release
