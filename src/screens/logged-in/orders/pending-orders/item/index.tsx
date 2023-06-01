@@ -15,8 +15,15 @@ import {APP_COLORS} from '../../../../../constants/colors';
 import {currencyFormatter, toastMessage} from '../../../../../helpers';
 interface IItemProps extends INavigationProp {
   item: IOrder;
+  setShowCodeModel: any;
+  setSelectedItem: any;
 }
-const Item = ({item, navigation}: IItemProps) => {
+const Item = ({
+  item,
+  navigation,
+  setSelectedItem,
+  setShowCodeModel,
+}: IItemProps) => {
   const {products} = useSelector((state: RootState) => state.products);
   const [product, setProduct] = useState<IProduct | undefined>(undefined);
   useEffect(() => {
@@ -116,6 +123,13 @@ const Item = ({item, navigation}: IItemProps) => {
         <Pressable
           onPress={() => navigation.navigate('ViewRoute', {order: item})}>
           <Text style={{color: APP_COLORS.BLACK}}>View Route</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            setSelectedItem(item);
+            setShowCodeModel(true);
+          }}>
+          <Text style={{color: APP_COLORS.ORANGE}}>Finish</Text>
         </Pressable>
       </View>
     </WhiteCard>
