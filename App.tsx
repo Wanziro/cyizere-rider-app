@@ -38,29 +38,29 @@ LogBox.ignoreLogs([
 // };
 
 function App(): JSX.Element {
-  // const {user}: any = store.getState();
-  // useEffect(() => {
-  //   subscribeToSocket(store);
-  //   // requestCloudMessagingNotificationPermissionFromUser();
+  const {user}: any = store.getState();
+  useEffect(() => {
+    subscribeToSocket(store);
+    // requestCloudMessagingNotificationPermissionFromUser();
 
-  //   // window.addEventListener("online", handleOnline);
-  //   // window.addEventListener("offline", handleOffline);
+    // window.addEventListener("online", handleOnline);
+    // window.addEventListener("offline", handleOffline);
 
-  //   return () => {
-  //     unSubscribeToSocket();
-  //     // window.removeEventListener("online", handleOnline);
-  //     // window.removeEventListener("offline", handleOffline);
-  //   };
-  // }, []);
-  // useEffect(() => {
-  //   let sub = true;
-  //   if (sub) {
-  //     store.dispatch(saveAppToken());
-  //   }
-  //   return () => {
-  //     sub = false;
-  //   };
-  // }, [user.fbToken]);
+    return () => {
+      unSubscribeToSocket();
+      // window.removeEventListener("online", handleOnline);
+      // window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+  useEffect(() => {
+    let sub = true;
+    if (sub) {
+      store.dispatch(saveAppToken());
+    }
+    return () => {
+      sub = false;
+    };
+  }, [user.fbToken]);
 
   const toastConfig = {
     success: ({text1, text2, props, ...rest}: any) => (
