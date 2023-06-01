@@ -26,6 +26,7 @@ const initialState = {
   names: '',
   email: '',
   phone: '',
+  momoCode: '',
 };
 const UpdateUserInfo = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const UpdateUserInfo = ({navigation}: INavigationProp) => {
       names: userReducer.names,
       email: userReducer.email,
       phone: userReducer.phone,
+      momoCode: userReducer.momoCode,
     });
   }, []);
 
@@ -75,6 +77,7 @@ const UpdateUserInfo = ({navigation}: INavigationProp) => {
           names: state.names,
           phone: state.phone,
           email: state.email,
+          momoCode: state.momoCode,
         });
         setIsLoading(false);
         navigation.goBack();
@@ -123,6 +126,18 @@ const UpdateUserInfo = ({navigation}: INavigationProp) => {
               placeholder="Enter your phone number"
               value={state.phone}
               onChangeText={text => setState({...state, phone: text})}
+            />
+          </View>
+          <View style={{marginVertical: 5}}>
+            <Text style={{color: APP_COLORS.TEXT_GRAY}}>
+              Momo Code (From which you will get paid)
+            </Text>
+            <TextInput
+              style={[commonInput]}
+              placeholder="Enter your momo code"
+              keyboardType="number-pad"
+              value={state.momoCode}
+              onChangeText={text => setState({...state, momoCode: text})}
             />
           </View>
         </ScrollView>

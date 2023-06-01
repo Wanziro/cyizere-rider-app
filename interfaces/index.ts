@@ -59,6 +59,7 @@ export interface IUser {
   isDisabled: boolean;
 
   fbToken: string;
+  momoCode: string;
 }
 
 export interface IWalletTransaction {
