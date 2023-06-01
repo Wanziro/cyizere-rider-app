@@ -111,6 +111,33 @@ const Profile = ({navigation}: INavigationProp) => {
             />
           </View>
         </Pressable>
+        <Pressable onPress={() => navigation.navigate('Wallet')}>
+          <View
+            style={[
+              viewFlexSpace,
+              {
+                paddingVertical: 10,
+                paddingHorizontal: 20,
+                borderBottomColor: APP_COLORS.BORDER_COLOR,
+                borderBottomWidth: 1,
+              },
+            ]}>
+            <Icon3 name="account-details" size={25} color={APP_COLORS.BLACK} />
+            <Text
+              style={{
+                color: APP_COLORS.TEXT_GRAY,
+                flex: 1,
+                marginHorizontal: 10,
+              }}>
+              My Wallet
+            </Text>
+            <Icon4
+              name="chevron-right"
+              size={25}
+              color={APP_COLORS.TEXT_GRAY}
+            />
+          </View>
+        </Pressable>
         <Pressable onPress={() => navigation.navigate('HelpAndSupport')}>
           <View
             style={[
