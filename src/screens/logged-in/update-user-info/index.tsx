@@ -64,7 +64,7 @@ const UpdateUserInfo = ({navigation}: INavigationProp) => {
     setIsLoading(true);
     axios
       .put(
-        app.BACKEND_URL + '/suppliers/info',
+        app.BACKEND_URL + '/riders/info',
         state,
         setHeaders(userReducer.token),
       )

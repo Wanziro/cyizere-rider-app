@@ -56,7 +56,7 @@ const AccountSettings = ({navigation}: INavigationProp) => {
             marginHorizontal: 10,
             color: APP_COLORS.BLACK,
           }}>
-          Available
+          Active
         </Text>
         {isLoading ? (
           <ActivityIndicator color={APP_COLORS.ORANGE} size={25} />

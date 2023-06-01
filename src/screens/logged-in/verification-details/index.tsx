@@ -42,7 +42,7 @@ const VerificationDetails = ({navigation}: INavigationProp) => {
       const formData = new FormData();
       formData.append('file', doc);
       setIsLoading(true);
-      const url = app.BACKEND_URL + '/suppliers/doc/';
+      const url = app.BACKEND_URL + '/riders/doc/';
       var xhr = new XMLHttpRequest();
       xhr.open('PUT', url);
       xhr.onload = function () {
