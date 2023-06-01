@@ -7,7 +7,7 @@ import Icon2 from 'react-native-vector-icons/FontAwesome';
 
 const HelpAndSupport = () => {
   const handleCall = () => {
-    Linking.openURL(`tel:0788712248`);
+    Linking.openURL(`tel:0791593322`);
   };
   const openLink = async (url: string) => {
     if (await Linking.canOpenURL(url)) {

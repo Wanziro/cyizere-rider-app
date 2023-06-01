@@ -30,7 +30,7 @@ const DisabledAccount = () => {
         />
         <Text style={{color: APP_COLORS.WHITE, textAlign: 'center'}}>
           Your account has been disabled. Contact Cyizere App Admin for further
-          help. 0788712248
+          help. +250 789 342 223
         </Text>
         <Pressable style={{width: width / 2}} onPress={() => handleLogout()}>
           <View

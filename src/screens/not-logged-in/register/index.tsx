@@ -129,6 +129,7 @@ const Register = ({navigation}: INavigationProp) => {
             lng,
             isDisabled,
             token,
+            momoCode,
           } = response.rider;
           dispatch(
             setUser({
@@ -148,6 +149,7 @@ const Register = ({navigation}: INavigationProp) => {
               isDisabled,
               token,
               fbToken,
+              momoCode,
             }),
           );
           toastMessage(TOAST_MESSAGE_TYPES.SUCCESS, response.msg);
