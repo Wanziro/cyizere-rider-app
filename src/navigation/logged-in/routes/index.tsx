@@ -30,15 +30,11 @@ import UpdateUserInfo from '../../../screens/logged-in/update-user-info';
 import ChangePassword from '../../../screens/logged-in/change-password';
 import DeleteAccount from '../../../screens/logged-in/delete-account';
 import HelpAndSupport from '../../../screens/logged-in/help-and-support';
-import EditProduct from '../../../screens/logged-in/edit-product';
 import ProductPrices from '../../../screens/logged-in/product-prices';
 import VisibleProducts from '../../../screens/logged-in/products/visible-products';
 import HiddenProducts from '../../../screens/logged-in/products/hiddden-products';
 import NotificationsHeader from '../../../screens/logged-in/notifications/header';
 import OrderPreview from '../../../screens/logged-in/order-preview';
-import AddPackaging from '../../../screens/logged-in/add-packaging';
-import EditPackagingOption from '../../../screens/logged-in/edit-packaging-option';
-import AddGift from '../../../screens/logged-in/add-gift';
 import WaitingOrders from '../../../screens/logged-in/orders/waiting-orders';
 import ViewRoute from '../../../screens/logged-in/view-route';
 const Stack = createStackNavigator();
@@ -364,19 +360,6 @@ function LoggedInRoutes() {
           })}
         />
         <Stack.Screen
-          name="EditProduct"
-          component={EditProduct}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Editing ' + route?.params?.product?.name,
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          })}
-        />
-        <Stack.Screen
           name="ProductPrices"
           component={ProductPrices}
           options={({route, navigation}: INavigationProp) => ({
@@ -403,45 +386,7 @@ function LoggedInRoutes() {
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           })}
         />
-        <Stack.Screen
-          name="AddPackaging"
-          component={AddPackaging}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Add Packaging Option',
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'left',
-            headerTintColor: APP_COLORS.WHITE,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          })}
-        />
-        <Stack.Screen
-          name="EditPackagingOption"
-          component={EditPackagingOption}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Editing ' + route?.params?.option?.name,
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          })}
-        />
-        <Stack.Screen
-          name="AddGift"
-          component={AddGift}
-          options={({route, navigation}: INavigationProp) => ({
-            title: 'Add gift',
-            headerStyle: {
-              backgroundColor: APP_COLORS.ORANGE,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: APP_COLORS.WHITE,
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          })}
-        />
+
         <Stack.Screen
           name="ViewRoute"
           component={ViewRoute}
