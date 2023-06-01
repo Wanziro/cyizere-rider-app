@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "150859394622",
+    "project_id": "cyizereapp",
+    "storage_bucket": "cyizereapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150859394622:android:07edf7d4fe6bda88f12b6f",
+        "android_client_info": {
+          "package_name": "com.cyizereriderapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150859394622-farqbb6d3bbplludocl8hkm8bl9ejvvl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJff0hcbPqvwc8XYNlskhbDaodrfP86qg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150859394622-farqbb6d3bbplludocl8hkm8bl9ejvvl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
