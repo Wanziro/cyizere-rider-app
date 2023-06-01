@@ -63,7 +63,7 @@ export interface IUser {
 
 export interface IWalletTransaction {
   id: number;
-  agentId: number;
+  riderId: number;
   transactionType: string;
   amount: number;
   transactionId: string;

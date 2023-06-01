@@ -1,30 +1,19 @@
 import {io} from 'socket.io-client';
 import {
   EVENT_NAMES_ENUM,
-  IMessage,
   INotificaton,
   IOrder,
   ISocketData,
-  ISubscribedMarketsReducer,
   IUser,
   IWalletTransaction,
   PAYMENT_STATUS_ENUM,
   USER_TYPE_ENUM,
 } from '../../../interfaces';
-// import {
-//   setAddOrUpdateCategory,
-//   setDeleteCategory,
-// } from '../../actions/categories';
 import {setAddOrUpdateMarket, setDeleteMarket} from '../../actions/markets';
-import {setAddOrUpdateMessages, setDeleteMessage} from '../../actions/messages';
 import {
   setAddOrUpdateNotification,
   setDeleteNotification,
 } from '../../actions/notifications';
-// import {
-//   setAddOrUpdateOrder,
-//   setDeleteOrder,
-// } from '../../actions/completedOrders';
 import {
   setAddOrUpdateProductPrice,
   setDeleteProductPrice,
@@ -35,8 +24,8 @@ import {
   setDeleteWalletTransaction,
 } from '../../actions/walletTransactions';
 import {app} from '../../constants/app';
-import {setUpdateAgent} from '../../actions/user';
-import {updateSupplierPaymentDetails} from '../../actions/suppliersPaymentDetails';
+import {setAddOrUpdateOrder, setDeleteOrder} from '../../actions/orders';
+import {setUser} from '../../actions/user';
 
 let mSocket: any = undefined;
 let mStore: any = undefined;
@@ -54,7 +43,7 @@ export const subscribeToSocket = (store: any) => {
     console.log('connected to socket');
   });
   emitSocket('addUser', {userType: 'client', userId: user.userId});
-  mSocket.on('NtumaEventNames', (data: ISocketData) => {
+  mSocket.on('CyizereEventNames', (data: ISocketData) => {
     // console.log(data);
     if (
       data.type !== undefined &&
@@ -64,7 +53,7 @@ export const subscribeToSocket = (store: any) => {
       dispatchBasicAppData(data, mStore);
     }
   });
-  mSocket.on('NtumaAgentEventNames', (data: {type: string; data: any}) => {
+  mSocket.on('CyizereRiderEventNames', (data: {type: string; data: any}) => {
     // console.log(data);
     if (
       data.type !== undefined &&
@@ -85,29 +74,6 @@ export const subscribeToSocket = (store: any) => {
 };
 
 const dispatchBasicAppData = (data: ISocketData, store: any) => {
-  //markets
-  if (
-    data.type === EVENT_NAMES_ENUM.ADD_MARKET ||
-    data.type === EVENT_NAMES_ENUM.UPDATE_MARKET
-  ) {
-    store.dispatch(setAddOrUpdateMarket(data.data));
-  }
-  if (data.type === EVENT_NAMES_ENUM.DELETE_MARKET) {
-    store.dispatch(setDeleteMarket(data.data));
-  }
-  //categories
-  // if (
-  //   data.type === EVENT_NAMES_ENUM.ADD_CATEGORY ||
-  //   data.type === EVENT_NAMES_ENUM.UPDATE_CATEGORY
-  // ) {
-  //   store.dispatch(setAddOrUpdateCategory(data.data));
-  // }
-  // if (data.type === EVENT_NAMES_ENUM.DELETE_CATEGORY) {
-  //   store.dispatch(setDeleteCategory(data.data));
-  // }
-  //clients
-  //
-
   //notifications
   if (
     data.type === EVENT_NAMES_ENUM.ADD_NOTIFICATON ||
@@ -142,21 +108,7 @@ const dispatchBasicAppData = (data: ISocketData, store: any) => {
 
 const dispatchUserData = (data: ISocketData, store: any) => {
   const {user} = store.getState();
-  const subscribedMarkets = store.getState() as ISubscribedMarketsReducer;
-  const {agentId} = user;
-  //messages
-  if (
-    data.type === EVENT_NAMES_ENUM.ADD_MESSAGE ||
-    data.type === EVENT_NAMES_ENUM.UPDATE_MESSAGE
-  ) {
-    const message = data.data as IMessage;
-    if (message?.userId !== undefined && message.agentId == agentId) {
-      store.dispatch(setAddOrUpdateMessages(data.data));
-    }
-  }
-  if (data.type === EVENT_NAMES_ENUM.DELETE_MESSAGE) {
-    store.dispatch(setDeleteMessage(data.data));
-  }
+  const {riderId} = user;
   //notifications
   if (
     data.type === EVENT_NAMES_ENUM.ADD_NOTIFICATON ||
@@ -165,8 +117,8 @@ const dispatchUserData = (data: ISocketData, store: any) => {
     const notification = data.data as INotificaton;
     if (
       notification.userId !== undefined &&
-      notification.userId == agentId &&
-      notification.userType === USER_TYPE_ENUM.AGENT
+      notification.userId == riderId &&
+      notification.userType === USER_TYPE_ENUM.RIDER
     ) {
       store.dispatch(setAddOrUpdateNotification(data.data));
     }
@@ -180,37 +132,16 @@ const dispatchUserData = (data: ISocketData, store: any) => {
     data.type === EVENT_NAMES_ENUM.UPDATE_ORDER
   ) {
     const order = data.data as IOrder;
-    const valid = subscribedMarkets.markets.find(
-      item => item.mId == order.marketId,
-    );
+
     if (
-      valid &&
       order.paymentStatus !== undefined &&
-      order.paymentStatus == PAYMENT_STATUS_ENUM.SUCCESS &&
-      order.riderId != null
+      order.paymentStatus == PAYMENT_STATUS_ENUM.SUCCESS
     ) {
-      // store.dispatch(setAddOrUpdateOrder(data.data));
-    }
-    if (
-      valid &&
-      order.paymentStatus !== undefined &&
-      order.paymentStatus == PAYMENT_STATUS_ENUM.SUCCESS &&
-      order.agentId == null
-    ) {
-      // store.dispatch(setAddOrUpdatePendingOrder(data.data));
-    }
-    if (
-      valid &&
-      order.paymentStatus !== undefined &&
-      order.paymentStatus == PAYMENT_STATUS_ENUM.SUCCESS &&
-      order.agentId != null &&
-      order.riderId == null
-    ) {
-      // store.dispatch(setAddOrUpdateAcceptedOrder(data.data));
+      store.dispatch(setAddOrUpdateOrder(data.data));
     }
   }
   if (data.type === EVENT_NAMES_ENUM.DELETE_ORDER) {
-    // store.dispatch(setDeleteOrder(data.data));
+    store.dispatch(setDeleteOrder(data.data));
   }
   //wallet transaction
   if (
@@ -218,24 +149,21 @@ const dispatchUserData = (data: ISocketData, store: any) => {
     data.type === EVENT_NAMES_ENUM.UPDATE_WALLET
   ) {
     const trans = data.data as IWalletTransaction;
-    if (trans.agentId !== undefined && trans.agentId == agentId) {
+    if (trans.riderId !== undefined && trans.riderId == riderId) {
       store.dispatch(setAddOrdUpdateWalletTransaction(data.data));
     }
   }
   if (data.type === EVENT_NAMES_ENUM.DELETE_WALLET) {
     store.dispatch(setDeleteWalletTransaction(data.data));
   }
-  //agents
-  // if (
-  //   data.type === EVENT_NAMES_ENUM.ADD_AGENT ||
-  //   data.type === EVENT_NAMES_ENUM.UPDATE_AGENT
-  // ) {
-  //   const agent = data.data as IUser;
-  //   if (agent.agentId == agentId) store.dispatch(setUpdateAgent(data.data));
-  // }
-  //suppliers payment details
-  if (data.type === EVENT_NAMES_ENUM.UPDATE_SUPPLIERS_PAYMENT_DETAILS) {
-    store.dispatch(updateSupplierPaymentDetails(data.data));
+  //riders
+  if (
+    data.type === EVENT_NAMES_ENUM.ADD_RIDER ||
+    data.type === EVENT_NAMES_ENUM.UPDATE_RIDER
+  ) {
+    const rider = data.data as IUser;
+    if (rider.riderId == riderId)
+      store.dispatch(setUser({...user, ...data.data}));
   }
 };
 
