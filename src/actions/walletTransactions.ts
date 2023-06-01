@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {IWalletTransaction} from '../../interfaces';
 import {app} from '../constants/app';
-import {errorHandler, returnErroMessage, setHeaders} from '../helpers';
-import {setUserWalletAmount} from './user';
+import {returnErroMessage, setHeaders} from '../helpers';
+import {setUser} from './user';
 
 export const SET_WALLET_TRANSACTIONS = 'SET_WALLET_TRANSACTIONS';
 export const SET_IS_LOADING_WALLET_TRANSACTIONS =
@@ -66,14 +66,14 @@ export const fetchWalletTransactions =
     dispatch(setIsLoadingWalletTransactions(true));
     dispatch(setLoadingWalletTransactionsError(''));
     axios
-      .get(app.BACKEND_URL + '/agentswallet/', setHeaders(user.token))
+      .get(app.BACKEND_URL + '/riderswallet/', setHeaders(user.token))
       .then(res => {
         dispatch(setIsLoadingWalletTransactions(false));
         dispatch({
           type: SET_WALLET_TRANSACTIONS,
           payload: res.data.transactions,
         });
-        dispatch(setUserWalletAmount(res.data.walletAmounts));
+        dispatch(setUser({...user, walletAmounts: res.data.walletAmounts}));
       })
       .catch(error => {
         const err = returnErroMessage(error);

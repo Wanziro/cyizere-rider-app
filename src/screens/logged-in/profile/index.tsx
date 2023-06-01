@@ -122,7 +122,7 @@ const Profile = ({navigation}: INavigationProp) => {
                 borderBottomWidth: 1,
               },
             ]}>
-            <Icon3 name="account-details" size={25} color={APP_COLORS.BLACK} />
+            <Icon3 name="wallet" size={25} color={APP_COLORS.BLACK} />
             <Text
               style={{
                 color: APP_COLORS.TEXT_GRAY,

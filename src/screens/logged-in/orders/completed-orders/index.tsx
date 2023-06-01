@@ -4,7 +4,11 @@ import {APP_COLORS} from '../../../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../reducers';
 import Loader from '../loader';
-import {INavigationProp, PAYMENT_STATUS_ENUM} from '../../../../../interfaces';
+import {
+  DELIVERY_STATUS_ENUM,
+  INavigationProp,
+  PAYMENT_STATUS_ENUM,
+} from '../../../../../interfaces';
 import NotFound from '../../../../components/not-found';
 import Item from './item';
 import {fetchOrders} from '../../../../actions/orders';
@@ -12,6 +16,7 @@ import {fetchOrders} from '../../../../actions/orders';
 const CompletedOrders = ({navigation}: INavigationProp) => {
   const dispatch = useDispatch();
   const {orders, isLoading} = useSelector((state: RootState) => state.orders);
+  const {riderId} = useSelector((state: RootState) => state.user);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -50,10 +55,18 @@ const CompletedOrders = ({navigation}: INavigationProp) => {
         {isLoading && orders.length === 0 ? (
           <Loader />
         ) : orders.filter(
-            item => item.paymentStatus === PAYMENT_STATUS_ENUM.SUCCESS,
+            item =>
+              item.paymentStatus === PAYMENT_STATUS_ENUM.SUCCESS &&
+              item.deliveryStatus === DELIVERY_STATUS_ENUM.COMPLETED &&
+              item.riderId === riderId,
           ).length > 0 ? (
           orders
-            .filter(item => item.paymentStatus === PAYMENT_STATUS_ENUM.SUCCESS)
+            .filter(
+              item =>
+                item.paymentStatus === PAYMENT_STATUS_ENUM.SUCCESS &&
+                item.deliveryStatus === DELIVERY_STATUS_ENUM.COMPLETED &&
+                item.riderId === riderId,
+            )
             .map((item, index) => (
               <Item item={item} key={index} navigation={navigation} />
             ))

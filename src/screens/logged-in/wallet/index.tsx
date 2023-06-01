@@ -163,6 +163,7 @@ const Wallet = () => {
                     </Text>
                     <Text
                       style={{
+                        textAlign: 'right',
                         color:
                           item.paymentStatus === 'SUCCESS'
                             ? APP_COLORS.GREEN
