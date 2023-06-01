@@ -119,6 +119,55 @@ const OrderPreview = ({
             {orderToUse?.gift ? orderTypesEnum.GIFT : orderTypesEnum.NORMAL}
           </Text>
         </View>
+        {orderToUse?.gift !== null && (
+          <>
+            <View
+              style={[
+                viewFlexSpace,
+                {
+                  borderBottomColor: APP_COLORS.BORDER_COLOR,
+                  borderBottomWidth: 1,
+                  padding: 10,
+                },
+              ]}>
+              <Text style={{color: APP_COLORS.BLACK, fontWeight: '600'}}>
+                Gift Name:
+              </Text>
+              <Text style={{color: APP_COLORS.TEXT_GRAY}}>
+                {orderToUse?.gift?.name}
+              </Text>
+            </View>
+            <View
+              style={[
+                viewFlexSpace,
+                {
+                  borderBottomColor: APP_COLORS.BORDER_COLOR,
+                  borderBottomWidth: 1,
+                  padding: 10,
+                },
+              ]}>
+              <Text style={{color: APP_COLORS.BLACK, fontWeight: '600'}}>
+                Packaging Color:
+              </Text>
+              <View style={[viewFlexCenter, {flexDirection: 'row'}]}>
+                <View
+                  style={{
+                    backgroundColor: orderToUse?.packagingColor as any,
+                    width: 20,
+                    height: 20,
+                  }}></View>
+                <Text
+                  style={{
+                    color: APP_COLORS.TEXT_GRAY,
+                    marginLeft: 10,
+                    textTransform: 'uppercase',
+                  }}>
+                  {orderToUse?.packagingColor}
+                </Text>
+              </View>
+            </View>
+          </>
+        )}
         <View
           style={{
             borderBottomColor: APP_COLORS.BORDER_COLOR,
