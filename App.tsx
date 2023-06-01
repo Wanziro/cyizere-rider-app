@@ -6,41 +6,45 @@ import {PersistGate} from 'redux-persist/integration/react';
 import Navigation from './src/navigation';
 import {subscribeToSocket, unSubscribeToSocket} from './src/worker/socket';
 import {saveAppToken} from './src/actions/user';
+import messaging from '@react-native-firebase/messaging';
 
 import Toast, {BaseToast} from 'react-native-toast-message';
 import {APP_COLORS} from './src/constants/colors';
+import {setUser} from './src/actions/user';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
-// const requestCloudMessagingNotificationPermissionFromUser = async () => {
-//   const authStatus = await messaging().requestPermission();
-//   const enabled =
-//     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-//     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+const requestCloudMessagingNotificationPermissionFromUser = async () => {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-//   if (enabled) {
-//     console.log('Authorization status:', authStatus);
-//     //get tokent
-//     const token = await messaging().getToken();
-//     console.log({token});
-//     if (token) {
-//       //subscribe to broadcast topic
-//       const subscription = await messaging().subscribeToTopic('broadcast');
-//       console.log({subscription});
-//       //save token to db
-//       store.dispatch(setFbToken(token));
-//       store.dispatch(saveAppToken());
-//     }
-//   }
-// };
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
+    //get tokent
+    const token = await messaging().getToken();
+    console.log({token});
+    if (token) {
+      //subscribe to broadcast topic
+      const subscription = await messaging().subscribeToTopic('broadcast');
+      console.log({subscription});
+      //save token to db
+
+      const {user}: any = store.getState();
+      store.dispatch(setUser({...user, fbToken: token}));
+      store.dispatch(saveAppToken());
+    }
+  }
+};
 
 function App(): JSX.Element {
   const {user}: any = store.getState();
   useEffect(() => {
     subscribeToSocket(store);
-    // requestCloudMessagingNotificationPermissionFromUser();
+    requestCloudMessagingNotificationPermissionFromUser();
 
     // window.addEventListener("online", handleOnline);
     // window.addEventListener("offline", handleOffline);

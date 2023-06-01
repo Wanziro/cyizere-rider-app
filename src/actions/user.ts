@@ -118,9 +118,9 @@ export const saveAppToken = (): any => (dispatch: any, getState: any) => {
     }
     axios
       .post(app.BACKEND_URL + '/apptokens/', {
-        userId: user.agentId,
+        userId: user.riderId,
         fbToken: user.fbToken,
-        appType: USER_TYPE_ENUM.AGENT,
+        appType: USER_TYPE_ENUM.RIDER,
       })
       .then(res => {
         // console.log({res});
