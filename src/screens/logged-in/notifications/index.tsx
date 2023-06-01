@@ -105,7 +105,7 @@ const Notifications = () => {
     dispatch(setShowClearAllNotificatonsConfirmation(false));
     setIsSubmitting(true);
     axios
-      .delete(app.BACKEND_URL + '/notifications/suppliers', setHeaders(token))
+      .delete(app.BACKEND_URL + '/notifications/riders', setHeaders(token))
       .then(res => {
         setIsSubmitting(false);
         dispatch(resetNotifications());
