@@ -33,6 +33,7 @@ const CustomPhoneInput = ({
           padding: 10,
           borderRightColor: APP_COLORS.BORDER_COLOR,
           borderRightWidth: 1,
+          color: APP_COLORS.BLACK,
         }}>
         +250
       </Text>
