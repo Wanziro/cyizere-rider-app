@@ -57,8 +57,7 @@ const HelpAndSupport = () => {
             </Text>
           </View>
         </Pressable>
-        <Pressable
-          onPress={() => openLink('https://cyizere.rw/contact-us.html')}>
+        <Pressable onPress={() => openLink('https://cyizere.rw/contact.html')}>
           <View
             style={[
               viewFlexSpace,
@@ -75,29 +74,7 @@ const HelpAndSupport = () => {
             <Icon2 name="angle-right" size={20} color={APP_COLORS.BLACK} />
           </View>
         </Pressable>
-        <Pressable onPress={() => openLink('https://cyizere.rw/terms.html')}>
-          <View
-            style={[
-              viewFlexSpace,
-              {
-                borderBottomColor: APP_COLORS.BORDER_COLOR,
-                borderBottomWidth: 1,
-                padding: 10,
-              },
-            ]}>
-            <Icon
-              name="airballoon-outline"
-              size={20}
-              color={APP_COLORS.BLACK}
-            />
-            <Text style={{flex: 1, marginLeft: 10, color: APP_COLORS.BLACK}}>
-              Terms of use
-            </Text>
-            <Icon2 name="angle-right" size={20} color={APP_COLORS.BLACK} />
-          </View>
-        </Pressable>
-        <Pressable
-          onPress={() => openLink('https://cyizere.rw/privacy-policy.html')}>
+        <Pressable onPress={() => openLink('https://cyizere.rw/privacy.html')}>
           <View
             style={[
               viewFlexSpace,
