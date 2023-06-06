@@ -25,6 +25,7 @@ import axios from 'axios';
 import {app} from '../../../constants/app';
 import {fetchNotifications} from '../../../actions/notifications';
 import FullPageLoader from '../../../components/full-page-loader';
+import { fetchOrders } from '../../../actions/orders';
 
 const OrderPreview = ({
   navigation,
@@ -66,6 +67,7 @@ const OrderPreview = ({
       .then(res => {
         setIsLoading(false);
         dispatch(fetchNotifications());
+        dispatch(fetchOrders())
         normalAlert({
           message: res.data.msg,
           okHandler: () => navigation.goBack(),
